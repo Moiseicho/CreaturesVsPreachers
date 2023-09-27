@@ -1,0 +1,115 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://elgama - Copy/silky_queen/Silky Queen.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://elgama - Copy/reactor.png" type="Texture" id=2]
+[ext_resource path="res://scripts/Reactor.cs" type="Script" id=3]
+
+[sub_resource type="Animation" id=1]
+resource_name = "10%"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 12, 13, 14, 15 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "100%"
+length = 1.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "50%"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 8, 9, 10, 9 ]
+}
+
+[sub_resource type="Animation" id=4]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0 ]
+}
+
+[sub_resource type="DynamicFont" id=5]
+size = 37
+font_data = ExtResource( 1 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 128, 96 )
+
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 134.5, 114 )
+
+[node name="Reactor" type="StaticBody2D"]
+script = ExtResource( 3 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite")
+method_call_mode = 1
+anims/10% = SubResource( 1 )
+anims/100% = SubResource( 2 )
+anims/50% = SubResource( 3 )
+anims/RESET = SubResource( 4 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+hframes = 8
+vframes = 2
+
+[node name="Label" type="Label" parent="."]
+margin_left = -64.0
+margin_top = 44.0
+margin_right = 25.0
+margin_bottom = 89.0
+custom_fonts/font = SubResource( 5 )
+text = "100%"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 67 )
+shape = SubResource( 6 )
+
+[node name="Hitbox" type="Area2D" parent="." groups=["reactorHB"]]
+
+[node name="Area" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2( 0.5, 50 )
+shape = SubResource( 7 )
