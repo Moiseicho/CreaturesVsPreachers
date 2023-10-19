@@ -167,6 +167,7 @@ tracks/2/keys = {
 texture = ExtResource( 3 )
 script = ExtResource( 4 )
 bulletOffset = Vector2( 40, -5 )
+knockback = 5000.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 2 )

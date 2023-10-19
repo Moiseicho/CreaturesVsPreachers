@@ -65,7 +65,10 @@ height = 240.0
 [node name="zomble" type="KinematicBody2D" groups=["zomble"]]
 scale = Vector2( 0.1, 0.1 )
 script = ExtResource( 1 )
-speed = 5000.0
+minSpeed = 7000
+maxSpeed = 12000
+minDamage = 1
+maxDamage = 2
 playerTargetRadius = 10000.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
