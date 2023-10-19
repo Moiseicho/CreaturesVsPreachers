@@ -139,7 +139,8 @@ public class Zomble : KinematicBody2D
 	public void takeDamage(float damage, Vector2 direction, float knockback)
 	{
 		health -= damage;
-		MoveAndSlide(direction * (knockback / direction.Length()));
+		///Figure out a way to have smooth knockback with a KinematicBody2D.
+		//MoveAndCollide(direction * (knockback / direction.Length()));
 	}
 
 }

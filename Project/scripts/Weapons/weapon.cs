@@ -14,6 +14,12 @@ public class weapon : Sprite
 	private float reloadTime = 1.5f;
 	[Export]
 	private float knockback = 50f;
+	[Export]
+	private float bulletSpeed = 1000f;
+	[Export]
+	private Vector2 bulletOffset { get; set;}
+	[Export]
+	private int pierce = 0;
 	
 	private float ammo;
 	private float fireTimer = 0f;
@@ -21,21 +27,36 @@ public class weapon : Sprite
 	
 	AnimationPlayer AP;
 	Zomble targetZomble;
-	
+	PackedScene bulletScene;
+
 	public override void _Ready()
 	{
 		AP = (AnimationPlayer)GetNode("AnimationPlayer");
 		AP.CurrentAnimation = "idle";
 		ammo = ammoCapacity;
+
+		bulletScene = GD.Load<PackedScene>("res://Nodes/Bullets/Bullet_A.tscn");
 	}
 
-	public void shoot()
+	public void createBullet()
+	{
+		Bullet bullet = (Bullet)bulletScene.Instance();
+		bullet.Position = GlobalPosition + (bulletOffset * new Vector2(1, FlipV ? -1 : 1)).Rotated(Rotation) ;
+		bullet.Damage = damagePerBullet;
+		bullet.KnockBack = knockback;
+		bullet.FizleTime = 0.5f;
+		bullet.Speed = bulletSpeed;
+		bullet.Rotation = Rotation;
+		bullet.Pierce = pierce;
+		GetParent().GetParent().AddChild(bullet);
+	}
+
+	private void shoot()
 	{
 		if(fireTimer > 0f || reloadTimer > 0f || ammo <= 0) return;
 		
-		if(targetZomble != null)
-			targetZomble.takeDamage(damagePerBullet, getDirectionToTarget(), knockback);
-		
+		createBullet();
+
 		fireTimer = 1/fireRate;
 		AP.CurrentAnimation = "shoot";
 		ammo--;
@@ -95,6 +116,7 @@ public class weapon : Sprite
 	
 	private void checkFlip()
 	{
+		//for some reason rarely this doesn't work
 		if (RotationDegrees % 360 > 90 && RotationDegrees % 360 < 270)
 		{
 			FlipV = true;
