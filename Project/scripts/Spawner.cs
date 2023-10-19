@@ -42,6 +42,12 @@ public class Spawner : Node
 				Zomble zombleInstance = zombles[i].Instance() as Zomble;
 				zombleInstance.Position = spawnPoints[spawnPointIndex];
 
+				Random random = new Random();
+
+				zombleInstance.setSpeed(random.Next(5000, 17000));
+				zombleInstance.setRadius(random.Next(0, 1000));
+				zombleInstance.setDamage(random.Next(1, 4));
+
 				GetParent().AddChild(zombleInstance);
 
 				spawnPointIndex++;

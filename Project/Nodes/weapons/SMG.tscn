@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://elgama - Copy/weapons/eagle/eagle_reload.png" type="Texture" id=1]
-[ext_resource path="res://elgama - Copy/weapons/eagle/eagle_shoot.png" type="Texture" id=2]
-[ext_resource path="res://elgama - Copy/weapons/eagle/eagle.png" type="Texture" id=3]
+[ext_resource path="res://elgama - Copy/weapons/eagle_reload.png" type="Texture" id=1]
+[ext_resource path="res://elgama - Copy/weapons/eagle_shoot.png" type="Texture" id=2]
+[ext_resource path="res://elgama - Copy/weapons/eagle.png" type="Texture" id=3]
 [ext_resource path="res://scripts/Weapons/weapon.cs" type="Script" id=4]
 
 [sub_resource type="Animation" id=2]
