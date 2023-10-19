@@ -4,14 +4,19 @@ using System;
 public class Zomble : KinematicBody2D
 {
 	[Export]
+	private int minSpeed = 0;
+	[Export]
+	private int maxSpeed = 0;
+	[Export]
+	private int minDamage = 0;
+	[Export]
+	private int maxDamage = 0;
+	private float tempSpeed = 0f;
 	private float speed = 0f;
 	[Export]
 	private float playerTargetRadius;
-	[Export]
 	private Player player;
-	[Export]
 	private float damage;
-	[Export]
 	private float health;
 	[Export]
 	private float maxHealth = 20;
@@ -36,6 +41,14 @@ public class Zomble : KinematicBody2D
 		AddChild(timer);
 		health = maxHealth;
 
+		Random random = new Random();
+
+		speed = random.Next(minSpeed, maxSpeed);
+		tempSpeed = speed;
+		playerTargetRadius = random.Next(0, 1000);
+		damage = random.Next(minDamage, maxDamage);
+
+
 		timer.Connect("timeout", this, nameof(OnBiteHit));
 		animationPlayer.Connect("animation_finished", this, nameof(OnAnimationFinished));
 	}
@@ -58,7 +71,7 @@ public class Zomble : KinematicBody2D
 			direction = (reactor.Position - Position);
 			playerT = false;
 		}
-		Vector2 movement = direction.Normalized() * speed * delta;
+		Vector2 movement = direction.Normalized() * tempSpeed * delta;
 		if(direction.x < 0)
 		{
 			if(right)
@@ -98,6 +111,19 @@ public class Zomble : KinematicBody2D
 		}
 		animationPlayer.CurrentAnimation = "walk";
 		MoveAndSlide(movement);
+		ManageSpeed(delta);
+	}
+
+	private void ManageSpeed(float delta)
+	{
+		if(tempSpeed < speed)
+		{
+			tempSpeed += delta * speed;
+		}
+		if(tempSpeed > speed)
+		{
+			tempSpeed = speed;
+		}
 	}
 
 	private void OnAnimationFinished(string animationName)
@@ -136,11 +162,10 @@ public class Zomble : KinematicBody2D
 
 	public void setDamage(float damage){this.damage = damage;}
 	
-	public void takeDamage(float damage, Vector2 direction, float knockback)
+	public void takeDamage(float damage, float knockback)
 	{
 		health -= damage;
-		///Figure out a way to have smooth knockback with a KinematicBody2D.
-		//MoveAndCollide(direction * (knockback / direction.Length()));
+		tempSpeed = speed - knockback;
 	}
 
 }
