@@ -117,10 +117,10 @@ public class weapon : Sprite
 	private void checkFlip()
 	{
 		//for some reason rarely this doesn't work
-		if (RotationDegrees % 360 > 90 && RotationDegrees % 360 < 270)
+		if (RotationDegrees % 360 > 90 && RotationDegrees % 360 < 270 && !FlipV)
 		{
 			FlipV = true;
-		}else
+		}else if((RotationDegrees % 360 <= 90 || RotationDegrees % 360 >= 270) && FlipV)
 		{
 			FlipV = false;
 		}
@@ -151,11 +151,23 @@ public class weapon : Sprite
 		checkFlip();
 	}
 	
+	public void rotationErrorLogger()
+	{
+		if (RotationDegrees % 360 > 90 && RotationDegrees % 360 < 270 && !FlipV)
+		{
+			GD.Print("The degrees are " + RotationDegrees%360 + " but the Flip is off!!!");
+		}else if((RotationDegrees % 360 <= 90 || RotationDegrees % 360 >= 270) && FlipV)
+		{
+			GD.Print("The degrees are " + RotationDegrees%360 + " but the Flip is on!!!");
+		}
+	}
+	
 	public override void _Process(float delta)
 	{
 		manageTimers(delta);
 		if(Input.IsActionPressed("ui_shoot"))shoot();
 		targetZomble = checkZomble();
 		gunlock();
+		rotationErrorLogger();
 	}
 }
