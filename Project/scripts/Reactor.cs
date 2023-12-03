@@ -11,6 +11,8 @@ public class Reactor : StaticBody2D
 	private Label label;
 	private AnimationPlayer animationPlayer;
 
+	[Signal]
+	public delegate void _ReactorDestroyed();
 
 	public override void _Ready()
 	{
@@ -43,8 +45,7 @@ public class Reactor : StaticBody2D
 		health -= damage;
 		if(health <= 0)
 		{
-			//gameOver();
-			QueueFree();
+			EmitSignal(nameof(_ReactorDestroyed));
 		}
 	}
 }
