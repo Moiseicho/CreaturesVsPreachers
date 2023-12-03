@@ -7,6 +7,7 @@ public class Player : KinematicBody2D
 	private float speed;
 	private float defaultSpeed;
 	private bool right = true;
+	private bool dead = false;
 	
 	AnimationPlayer ap;
 	Sprite sp;
@@ -18,6 +19,9 @@ public class Player : KinematicBody2D
 	private float maxHp = 100;
 	private float hp;
 	
+	[Signal]
+	public delegate void _PlayerDied();
+
 	public override void _Ready()
 	{
 
@@ -37,7 +41,11 @@ public class Player : KinematicBody2D
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(float delta)
-	{
+	{	
+		if(dead)
+		{
+			return;
+		}
 		bool moving = false;
 		right = !sp.FlipH;
 		Vector2 movement = new Vector2(0, 0);
@@ -94,7 +102,9 @@ public class Player : KinematicBody2D
 		hp -= damage;
 		if(hp <= 0)
 		{
-			QueueFree();
+			EmitSignal(nameof(_PlayerDied));
+			dead = true;
+			//animation to dead
 		}
 	}
 
