@@ -13,7 +13,7 @@ public class weapon : Sprite
 	[Export]
 	private float reloadTime = 1.5f;
 	[Export]
-	private float knockback = 50f;
+	private float knockback = 5000f;
 	[Export]
 	private float bulletSpeed = 1000f;
 	[Export]
@@ -165,9 +165,9 @@ public class weapon : Sprite
 	public override void _Process(float delta)
 	{
 		manageTimers(delta);
-		if(Input.IsActionPressed("ui_shoot"))shoot();
 		targetZomble = checkZomble();
 		gunlock();
 		rotationErrorLogger();
+		if(Input.IsActionPressed("ui_shoot"))shoot();
 	}
 }
