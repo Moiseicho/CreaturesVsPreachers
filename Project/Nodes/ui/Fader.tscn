@@ -428,7 +428,7 @@ script = ExtResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-color = Color( 0, 0, 0, 1 )
+color = Color( 0, 0, 0, 0 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../..")
@@ -442,6 +442,7 @@ anims/RESET = SubResource( 6 )
 anims/TextDisolve = SubResource( 9 )
 
 [node name="Buttons" type="VBoxContainer" parent="."]
+modulate = Color( 1, 1, 1, 0 )
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -494,6 +495,7 @@ text = "QUIT"
 flat = true
 
 [node name="GameOverLabel" type="Label" parent="."]
+modulate = Color( 1, 1, 1, 0 )
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5

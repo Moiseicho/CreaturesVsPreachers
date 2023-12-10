@@ -485,6 +485,5 @@ maxHp = 30.0
 [node name="GUI" parent="." instance=ExtResource( 4 )]
 
 [node name="spawner" parent="." instance=ExtResource( 5 )]
-waveAmount = 1
-waveNumbers = [ [ 5 ] ]
+position = Vector2( -250, 50 )
 spawnPoints = [ Vector2( -220, 600 ), Vector2( -900, 400 ), Vector2( -1100, -160 ), Vector2( -800, -650 ), Vector2( -220, -850 ), Vector2( 400, -650 ), Vector2( 620, -110 ), Vector2( 300, 450 ) ]

@@ -1,0 +1,27 @@
+{
+    "waves":
+    [
+        {
+            "subWaves":
+            [
+                {
+                    "zomble": "5"
+                },
+                {
+                    "zomble": "7"
+                }
+            ]
+        },
+        {
+            "subWaves":
+            [
+                {
+                    "zomble": "10"
+                },
+                {
+                    "zomble": "15"
+                }
+            ]
+        }
+    ]
+}
