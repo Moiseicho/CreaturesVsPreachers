@@ -29,6 +29,9 @@ public class Zomble : KinematicBody2D
 	private bool right = true;
 	private Reactor reactor;
 
+	[Signal]
+	public delegate void _ZombleDied();
+
 	public override void _Ready()
 	{
 		player = (Player)GetNode("../Player");
@@ -48,7 +51,6 @@ public class Zomble : KinematicBody2D
 		playerTargetRadius = random.Next(0, 1000);
 		damage = random.Next(minDamage, maxDamage);
 
-
 		timer.Connect("timeout", this, nameof(OnBiteHit));
 		animationPlayer.Connect("animation_finished", this, nameof(OnAnimationFinished));
 	}
@@ -56,8 +58,12 @@ public class Zomble : KinematicBody2D
 	public void manageLife()
 	{
 		if(health <= 0)
+		{
+			EmitSignal(nameof(_ZombleDied));
 			QueueFree();
+		}
 	}
+
 
 	public override void _Process(float delta)
 	{
