@@ -43,6 +43,7 @@ height = 6.0
 collision_layer = 0
 collision_mask = 0
 script = ExtResource( 2 )
+Speed = 250.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 1 )

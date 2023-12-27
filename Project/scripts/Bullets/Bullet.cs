@@ -3,72 +3,108 @@ using System;
 
 public class Bullet : KinematicBody2D
 {
-	private float _speed = 10f;
-	private float _fizleTime = 0.5f;
-	private float _damage = 5;
-	private float _knockBack = 5;
-	private int _pierce = 0;
-	private Area2D collision;
+	protected float speed = 10f;
+	protected float fizleTime = 0.5f;
+	protected float damage = 5;
+	protected float knockBack = 5;
+	protected int pierce = 0;
+	
+	protected Sprite sprite;
+	protected Area2D collision;
+	[Export]
+	protected EffectOnHit effectOnHit;
+	[Export]
+	protected PackedScene effectOnFizleScene;
 
 	[Export]
 	public float Speed
 	{
-		get { return _speed; }
-		set { _speed = value; }
+		get { return speed; }
+		set { speed = value; }
 	}
 	[Export]
 	public int Pierce
 	{
-		get { return _pierce; }
-		set { _pierce = value; }
+		get { return pierce; }
+		set { pierce = value; }
 	}
 
 	[Export]
 	public float FizleTime
 	{
-		get { return _fizleTime; }
-		set { _fizleTime = value; }
+		get { return fizleTime; }
+		set { fizleTime = value; }
 	}
 
 	[Export]
 	public float Damage
 	{
-		get { return _damage; }
-		set { _damage = value; }
+		get { return damage; }
+		set { damage = value; }
 	}
 
 	[Export]
 	public float KnockBack
 	{
-		get { return _knockBack; }
-		set { _knockBack = value; }
+		get { return knockBack; }
+		set { knockBack = value; }
 	}
 
 	public override void _Ready()
 	{
+		sprite = (Sprite)GetNode("Sprite");
 		collision = (Area2D)GetNode("Area2D");
 		collision.Connect("area_entered", this, nameof(_on_Bullet_area_entered));
 	}
 
 	public override void _PhysicsProcess(float delta)
 	{
-		_fizleTime -= delta;
-		Vector2 velocity = new Vector2(_speed, 0).Rotated(Rotation);
+		fizleTime -= delta;
+		checkFlip();
+		Vector2 velocity = new Vector2(speed, 0).Rotated(Rotation);
 		MoveAndCollide(velocity * delta);
-		if (_fizleTime <= 0)
+		if (fizleTime <= 0)
 		{
-			QueueFree();
+			Fizle();
 		}
 	}
 
-	private void _on_Bullet_area_entered(Area2D area)
+	private void checkFlip()
+	{
+		float fixedDegrees = (360+(RotationDegrees % 360))%360;
+		if ((360+(fixedDegrees % 360))%360 > 90 && fixedDegrees % 360 < 270 && !sprite.FlipV)
+		{
+			sprite.FlipV = true;
+		}else if((fixedDegrees % 360 <= 90 || fixedDegrees % 360 >= 270) && sprite.FlipV)
+		{
+			sprite.FlipV = false;
+		}
+	}
+
+	protected virtual void Fizle()
+	{
+		if(effectOnFizleScene != null)
+		{
+			EffectOnFizle splash = (EffectOnFizle)effectOnFizleScene.Instance();
+			splash.Position = GlobalPosition;
+			GetTree().Root.CallDeferred("add_child", splash);
+		}
+		QueueFree();
+	}
+
+	protected virtual void _on_Bullet_area_entered(Area2D area)
 	{
 		if (area.IsInGroup("enemyHitbox"))
 		{
 			Zomble zomble = (Zomble)area.GetParent();
-			zomble.takeDamage(_damage, _knockBack);
-			if(_pierce <= 0)QueueFree();
-			_pierce--;
+			zomble.takeDamage(damage, knockBack);
+			if(pierce <= 0)Fizle();
+			pierce--;
+			return;
+		}
+		if (!area.IsInGroup("enemy") && !area.IsInGroup("playerHB") && !area.IsInGroup("reactorHB"))
+		{
+			Fizle();
 		}
 	}
 	
