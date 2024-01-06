@@ -8,6 +8,13 @@ public class Player : KinematicBody2D
 	private float defaultSpeed;
 	private bool right = true;
 	private bool dead = false;
+
+	private Ability ability1;
+	private float ability1Cooldown;
+	private float ability1Timer = 0f;
+	private Ability ability2;
+	private float ability2Cooldown;
+	private float ability2Timer = 0f;
 	
 	AnimationPlayer ap;
 	Sprite sp;
@@ -18,6 +25,10 @@ public class Player : KinematicBody2D
 	[Export]
 	private float maxHp = 100;
 	private float hp;
+	private bool abilityEquiped = false;
+	private Throwable throwable = null;
+
+	Weapon weapon;
 	
 	[Signal]
 	public delegate void _PlayerDied();
@@ -32,6 +43,31 @@ public class Player : KinematicBody2D
 		sp = (Sprite)GetNode("Sprite");
 		collisionHull = (CollisionShape2D)GetNode("CollisionHull");
 		hitbox = (Area2D)GetNode("Hitbox");
+		foreach (Node child in GetChildren())
+		{
+			if(child is Weapon)
+			{
+				weapon = (Weapon)child;
+			}
+		}
+
+		ThrowAbility temp = new ThrowAbility();
+		temp.setBulletScene((PackedScene)ResourceLoader.Load("res://Nodes/bullets/throwables/ToxicGrenade.tscn"));
+		temp.Player = this;
+		temp.Cooldown = 5f;
+		
+		ability1 = temp;
+		ability1Cooldown = ability1.getCooldown();
+
+		SummonAbility temp2 = new SummonAbility();
+		temp2.setSummonableScene((PackedScene)ResourceLoader.Load("res://Nodes/Summonables/StaticSummonables/IceWall.tscn"));
+		temp2.Player = this;
+		temp2.Cooldown = 5f;
+		temp2.setIsStatic(true);
+		
+		ability2 = temp2;
+		ability2Cooldown = ability2.getCooldown();
+		
 	}
 
 	private void setAnimation(string animation)
@@ -57,6 +93,10 @@ public class Player : KinematicBody2D
 				hitbox.Scale *= (new Vector2(-1, 1));
 				collisionHull.Position *= (new Vector2(-1, 1));
 				sp.FlipH = true;
+				if(abilityEquiped)
+				{
+					throwable.Position *= (new Vector2(-1, 1));
+				}
 			}
 			movement += new Vector2(-delta, 0);
 			moving = true;
@@ -68,6 +108,10 @@ public class Player : KinematicBody2D
 				hitbox.Scale *= (new Vector2(-1, 1));
 				collisionHull.Position *= (new Vector2(-1, 1));
 				sp.FlipH = false;
+				if(abilityEquiped)
+				{
+					throwable.Position *= (new Vector2(-1, 1));
+				}
 			}
 			movement += new Vector2(delta, 0);
 			moving = true;
@@ -82,6 +126,52 @@ public class Player : KinematicBody2D
 			movement += new Vector2(0, delta);
 			moving = true;
 		}
+		if(Input.IsActionPressed("ui_ability1") && ability1 != null && !abilityEquiped && ability1Timer <= 0f)
+		{
+			ability1.Effect();
+			ability1Timer = ability1Cooldown;
+		}
+		if(Input.IsActionPressed("ui_ability2") && ability2 != null && !abilityEquiped && ability2Timer <= 0f)
+		{
+			ability2.Effect();
+			ability2Timer = ability2Cooldown;
+		}
+		if(Input.IsActionPressed("ui_shoot") && abilityEquiped)
+		{
+			throwable.Position = Position + new Vector2(20, 0) * (right ? 1 : -1);
+			RemoveChild(throwable);
+			GetTree().Root.AddChild(throwable);
+			throwable.Throw();
+			weapon.enable();
+			abilityEquiped = false;
+		}
+
+
+		manageAnimation(moving);
+		manageTimers(delta);
+		
+		if(movement.x != 0 && movement.y != 0)
+		{
+			movement.x = (float)(movement.x/Math.Sqrt(2));
+			movement.y = (float)(movement.y/Math.Sqrt(2));
+		}
+		MoveAndSlide(movement * speed);
+	}
+
+	private void manageTimers(float delta)
+	{
+		if(ability1Timer > 0f && !abilityEquiped)
+		{
+			ability1Timer -= delta;
+		}
+		if(ability2Timer > 0f && !abilityEquiped)
+		{
+			ability2Timer -= delta;
+		}
+	}
+
+	private void manageAnimation(bool moving)
+	{
 		if(moving)
 		{
 			setAnimation("walk");
@@ -89,12 +179,6 @@ public class Player : KinematicBody2D
 		{
 			setAnimation("idle");
 		}
-		if(movement.x != 0 && movement.y != 0)
-		{
-			movement.x = (float)(movement.x/Math.Sqrt(2));
-			movement.y = (float)(movement.y/Math.Sqrt(2));
-		}
-		MoveAndSlide(movement * speed);
 	}
 
 	public void takeDamage(float damage)
@@ -116,5 +200,14 @@ public class Player : KinematicBody2D
 	public bool getOrientation()
 	{
 		return right;
+	}
+
+	public void equipAbility(PackedScene throwableScene)
+	{
+		weapon.disable();
+		throwable = (Throwable)throwableScene.Instance();
+		throwable.Position = new Vector2(20, 0) * (right ? 1 : -1);
+		AddChild(throwable);
+		abilityEquiped = true;
 	}
 }

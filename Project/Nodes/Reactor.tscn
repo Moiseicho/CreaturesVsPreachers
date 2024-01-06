@@ -75,7 +75,7 @@ size = 37
 font_data = ExtResource( 1 )
 
 [sub_resource type="RectangleShape2D" id=6]
-extents = Vector2( 128, 96 )
+extents = Vector2( 128, 111 )
 
 [sub_resource type="RectangleShape2D" id=7]
 extents = Vector2( 134.5, 114 )
@@ -105,11 +105,14 @@ custom_fonts/font = SubResource( 5 )
 text = "100%"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, 67 )
+visible = false
+position = Vector2( 0, 52 )
 shape = SubResource( 6 )
 
 [node name="Hitbox" type="Area2D" parent="." groups=["reactorHB"]]
+visible = false
 
 [node name="Area" type="CollisionShape2D" parent="Hitbox"]
+visible = false
 position = Vector2( 0.5, 50 )
 shape = SubResource( 7 )

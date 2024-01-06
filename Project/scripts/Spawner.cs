@@ -20,7 +20,7 @@ public class Spawner : Node
 	private Timer timer;
 	private Label label;
 
-	private int timeLeft = 60;
+	private int timeLeft = 10;
 
 	public override void _Ready()
 	{

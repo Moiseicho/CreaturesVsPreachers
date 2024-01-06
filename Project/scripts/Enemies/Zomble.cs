@@ -28,6 +28,9 @@ public class Zomble : KinematicBody2D
 	private Area2D biteBox;
 	private bool right = true;
 	private Reactor reactor;
+	private bool stuck = false;
+	private Timer slowDownTimer;
+	private bool frozen = false;
 
 	[Signal]
 	public delegate void _ZombleDied();
@@ -53,6 +56,11 @@ public class Zomble : KinematicBody2D
 
 		timer.Connect("timeout", this, nameof(OnBiteHit));
 		animationPlayer.Connect("animation_finished", this, nameof(OnAnimationFinished));
+
+		slowDownTimer = new Timer();
+		AddChild(slowDownTimer);
+		slowDownTimer.Connect("timeout", this, nameof(unstuck));
+
 	}
 
 	public void manageLife()
@@ -68,7 +76,10 @@ public class Zomble : KinematicBody2D
 	public override void _Process(float delta)
 	{
 		manageLife();
+		if(frozen) return;
 		if(biting) return;
+		if(player == null) return;
+		if(reactor == null) return;
 
 		bool playerT = true;
 		Vector2 direction = (player.Position - Position);
@@ -122,6 +133,7 @@ public class Zomble : KinematicBody2D
 
 	private void ManageSpeed(float delta)
 	{
+		if(stuck) return;
 		if(tempSpeed < speed)
 		{
 			tempSpeed += delta * speed;
@@ -171,7 +183,36 @@ public class Zomble : KinematicBody2D
 	public void takeDamage(float damage, float knockback)
 	{
 		health -= damage;
-		tempSpeed = speed - knockback;
+		if(!stuck)tempSpeed = speed - knockback;
+		GD.Print("took damage " + damage);
+	}
+
+	public void slowDown(float slowDown, float duration)
+	{
+		tempSpeed = speed * slowDown;
+		slowDownTimer.Stop();
+		slowDownTimer.WaitTime = duration;
+		slowDownTimer.Start();
+		GD.Print("stuck");
+		stuck = true;
+ 	}
+
+	private void unstuck()
+	{
+		GD.Print("unstuck");
+		stuck = false;
+		slowDownTimer.Stop();
+	}
+
+	public void freeze()
+	{
+		frozen = true;
+		animationPlayer.Stop();
+	}
+	public void unfreeze()
+	{
+		frozen = false;
+		animationPlayer.Play();
 	}
 
 }

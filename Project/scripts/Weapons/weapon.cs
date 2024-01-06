@@ -2,8 +2,9 @@ using Godot;
 using System;
 using Godot.Collections;
 
-public class weapon : Sprite
+public class Weapon : Sprite
 {
+	
 	[Export]
 	private float damagePerBullet = 5;
 	[Export]
@@ -25,17 +26,20 @@ public class weapon : Sprite
 	private float fireTimer = 0f;
 	private float reloadTimer = 0f;
 	
+	private bool disabled = false;
+	
 	AnimationPlayer AP;
 	Zomble targetZomble;
+
+	[Export]
 	PackedScene bulletScene;
+	
 
 	public override void _Ready()
 	{
 		AP = (AnimationPlayer)GetNode("AnimationPlayer");
 		AP.CurrentAnimation = "idle";
 		ammo = ammoCapacity;
-
-		bulletScene = GD.Load<PackedScene>("res://Nodes/Bullets/Bullet_A.tscn");
 	}
 
 	public void createBullet()
@@ -48,7 +52,7 @@ public class weapon : Sprite
 		bullet.Speed = bulletSpeed;
 		bullet.Rotation = Rotation;
 		bullet.Pierce = pierce;
-		GetParent().GetParent().AddChild(bullet);
+		GetTree().Root.AddChild(bullet);
 	}
 
 	private void shoot()
@@ -116,11 +120,11 @@ public class weapon : Sprite
 	
 	private void checkFlip()
 	{
-		//for some reason rarely this doesn't work
-		if (RotationDegrees % 360 > 90 && RotationDegrees % 360 < 270 && !FlipV)
+		float fixedDegrees = (360+(RotationDegrees % 360))%360;
+		if ((360+(fixedDegrees % 360))%360 > 90 && fixedDegrees % 360 < 270 && !FlipV)
 		{
 			FlipV = true;
-		}else if((RotationDegrees % 360 <= 90 || RotationDegrees % 360 >= 270) && FlipV)
+		}else if((fixedDegrees % 360 <= 90 || fixedDegrees % 360 >= 270) && FlipV)
 		{
 			FlipV = false;
 		}
@@ -151,23 +155,27 @@ public class weapon : Sprite
 		checkFlip();
 	}
 	
-	public void rotationErrorLogger()
-	{
-		if (RotationDegrees % 360 > 90 && RotationDegrees % 360 < 270 && !FlipV)
-		{
-			GD.Print("The degrees are " + RotationDegrees%360 + " but the Flip is off!!!");
-		}else if((RotationDegrees % 360 <= 90 || RotationDegrees % 360 >= 270) && FlipV)
-		{
-			GD.Print("The degrees are " + RotationDegrees%360 + " but the Flip is on!!!");
-		}
-	}
-	
 	public override void _Process(float delta)
 	{
+		if(disabled) return;
 		manageTimers(delta);
 		targetZomble = checkZomble();
 		gunlock();
-		rotationErrorLogger();
 		if(Input.IsActionPressed("ui_shoot"))shoot();
+	}
+
+
+	public void disable()
+	{
+		disabled = true;
+		Visible = false;
+	}
+
+	public void enable()
+	{
+		disabled = false;
+		Visible = true;
+		fireTimer = 0.5f;
+
 	}
 }

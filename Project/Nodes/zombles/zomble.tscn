@@ -64,6 +64,7 @@ height = 240.0
 
 [node name="zomble" type="KinematicBody2D" groups=["zomble"]]
 scale = Vector2( 0.1, 0.1 )
+z_index = 5
 script = ExtResource( 1 )
 minSpeed = 7000
 maxSpeed = 12000
@@ -87,14 +88,14 @@ hframes = 5
 vframes = 2
 frame = 2
 
-[node name="BiteBox" type="Area2D" parent="."]
+[node name="BiteBox" type="Area2D" parent="." groups=["enemy"]]
 position = Vector2( 120, 0 )
 
 [node name="Area" type="CollisionShape2D" parent="BiteBox"]
 position = Vector2( 1.52588e-05, 0 )
 shape = SubResource( 6 )
 
-[node name="Hitbox" type="Area2D" parent="." groups=["enemyHitbox"]]
+[node name="Hitbox" type="Area2D" parent="." groups=["enemy", "enemyHitbox"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource( 7 )
