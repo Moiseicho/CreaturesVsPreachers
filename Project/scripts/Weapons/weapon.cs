@@ -2,7 +2,7 @@ using Godot;
 using System;
 using Godot.Collections;
 
-public class Weapon : Sprite
+public class Weapon : AnimatedSprite
 {
 	
 	[Export]
@@ -18,8 +18,11 @@ public class Weapon : Sprite
 	[Export]
 	private float bulletSpeed = 1000f;
 	[Export]
-	private Vector2 bulletOffset { get; set;}
+	private Vector2 bulletOffset = new Vector2(0, 0);
 	[Export]
+	private float bulletTimeOffset = 0f;
+	[Export]
+	private float fizleTime = 0.5f;
 	private int pierce = 0;
 	
 	private float ammo;
@@ -28,18 +31,21 @@ public class Weapon : Sprite
 	
 	private bool disabled = false;
 	
-	AnimationPlayer AP;
 	Zomble targetZomble;
 
 	[Export]
 	PackedScene bulletScene;
+
+	private Vector2 originalOffset;
 	
 
 	public override void _Ready()
 	{
-		AP = (AnimationPlayer)GetNode("AnimationPlayer");
-		AP.CurrentAnimation = "idle";
+		checkFlip();
+		this.Animation = "idle";
 		ammo = ammoCapacity;
+		originalOffset = Offset;
+		this.Playing = true;
 	}
 
 	public void createBullet()
@@ -48,7 +54,7 @@ public class Weapon : Sprite
 		bullet.Position = GlobalPosition + (bulletOffset * new Vector2(1, FlipV ? -1 : 1)).Rotated(Rotation) ;
 		bullet.Damage = damagePerBullet;
 		bullet.KnockBack = knockback;
-		bullet.FizleTime = 0.5f;
+		bullet.FizleTime = fizleTime;
 		bullet.Speed = bulletSpeed;
 		bullet.Rotation = Rotation;
 		bullet.Pierce = pierce;
@@ -59,11 +65,21 @@ public class Weapon : Sprite
 	{
 		if(fireTimer > 0f || reloadTimer > 0f || ammo <= 0) return;
 		
-		createBullet();
+		if(bulletTimeOffset == 0f)
+		{
+			createBullet();
+		}else{
+			Timer timer = new Timer();
+			timer.OneShot = true;
+			timer.WaitTime = bulletTimeOffset;
+			AddChild(timer);
+			timer.Connect("timeout", this, nameof(createBullet));
+			timer.Start();
+		}
 
 		fireTimer = 1/fireRate;
-		AP.CurrentAnimation = "shoot";
-		ammo--;
+		this.Animation = "fire";
+		if(reloadTime > 0f)ammo--;
 	}
 	
 	public void manageTimers(float delta)
@@ -71,17 +87,17 @@ public class Weapon : Sprite
 		if(fireTimer > 0)
 		{
 			fireTimer -= delta;
-			if(fireTimer < 0) 
+			if(fireTimer < 0 && reloadTimer <= 0) 
 			{
 				fireTimer = 0;
-				AP.CurrentAnimation = "idle";
+				this.Animation = "idle";
 			}
 		}
 		if(ammo <= 0 && fireTimer <= 0f )
 		{
 			ammo = ammoCapacity;
 			reloadTimer = reloadTime;
-			AP.CurrentAnimation = "reload";
+			this.Animation = "reload";
 		}
 		
 		if(reloadTimer > 0)
@@ -90,7 +106,7 @@ public class Weapon : Sprite
 			if(reloadTimer <= 0)
 			{
 				reloadTimer = 0;
-				AP.CurrentAnimation = "idle";
+				this.Animation = "idle";
 			}
 		}
 	}
@@ -124,9 +140,12 @@ public class Weapon : Sprite
 		if ((360+(fixedDegrees % 360))%360 > 90 && fixedDegrees % 360 < 270 && !FlipV)
 		{
 			FlipV = true;
+			Offset = new Vector2(originalOffset.x, originalOffset.y*-1);
+			
 		}else if((fixedDegrees % 360 <= 90 || fixedDegrees % 360 >= 270) && FlipV)
 		{
 			FlipV = false;
+			Offset = originalOffset;
 		}
 	}
 	
@@ -161,7 +180,13 @@ public class Weapon : Sprite
 		manageTimers(delta);
 		targetZomble = checkZomble();
 		gunlock();
-		if(Input.IsActionPressed("ui_shoot"))shoot();
+		if(Input.IsActionPressed("ui_shoot"))
+		{
+			shoot();
+		}else if(Input.IsActionPressed("ui_reload"))
+		{
+			manualReload();
+		}
 	}
 
 
@@ -177,5 +202,13 @@ public class Weapon : Sprite
 		Visible = true;
 		fireTimer = 0.5f;
 
+	}
+
+	public void manualReload()
+	{
+		if(ammo >= ammoCapacity || reloadTimer > 0f || reloadTime == 0) return;
+		ammo = ammoCapacity;
+		reloadTimer = reloadTime;
+		this.Animation = "reload";
 	}
 }

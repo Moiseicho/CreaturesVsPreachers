@@ -1,12 +1,15 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Nodes/ui/Fader.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/Ui/GUI.cs" type="Script" id=2]
-[ext_resource path="res://elgama - Copy/ui/health bar.png" type="Texture" id=3]
-[ext_resource path="res://elgama - Copy/ui/health bar health.png" type="Texture" id=4]
-[ext_resource path="res://elgama - Copy/ui/health bar empty.png" type="Texture" id=5]
+[ext_resource path="res://Sprites/ui/health bar.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/ui/health bar health.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/ui/health bar empty.png" type="Texture" id=5]
 [ext_resource path="res://fonts/impact.ttf" type="DynamicFontData" id=6]
-[ext_resource path="res://elgama - Copy/ui/pause menu.png" type="Texture" id=7]
+[ext_resource path="res://Sprites/ui/pause menu.png" type="Texture" id=7]
+[ext_resource path="res://Nodes/ui/upgradeMenu/UpgradeOptionButton.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Sprites/ui/upgrade menu.png" type="Texture" id=9]
+[ext_resource path="res://scripts/Ui/UpgradeMenu/UpgradeMenu.cs" type="Script" id=10]
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 5 )
@@ -169,6 +172,43 @@ custom_fonts/font = SubResource( 4 )
 text = "QUIT"
 flat = true
 icon_align = 1
+
+[node name="UpgradeMenu" type="TextureRect" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -480.0
+margin_top = -480.0
+margin_right = 480.0
+margin_bottom = 480.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource( 9 )
+expand = true
+script = ExtResource( 10 )
+
+[node name="UpgradeOptionButton1" parent="UpgradeMenu" instance=ExtResource( 8 )]
+margin_left = 114.0
+margin_top = 400.0
+margin_right = 284.0
+margin_bottom = 570.0
+mouse_default_cursor_shape = 2
+
+[node name="UpgradeOptionButton2" parent="UpgradeMenu" instance=ExtResource( 8 )]
+margin_left = 399.0
+margin_top = 400.0
+margin_right = 569.0
+margin_bottom = 570.0
+mouse_default_cursor_shape = 2
+
+[node name="UpgradeOptionButton3" parent="UpgradeMenu" instance=ExtResource( 8 )]
+margin_left = 684.0
+margin_top = 400.0
+margin_right = 854.0
+margin_bottom = 570.0
+mouse_default_cursor_shape = 2
 
 [connection signal="pressed" from="PauseMenu/TextureRect/VBoxContainer/Resume" to="." method="_on_Resume_pressed"]
 [connection signal="pressed" from="PauseMenu/TextureRect/VBoxContainer/Menu" to="." method="_on_Menu_pressed"]

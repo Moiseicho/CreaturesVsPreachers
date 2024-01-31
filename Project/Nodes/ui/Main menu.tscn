@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://fonts/impact.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://elgama - Copy/ui/main.png" type="Texture" id=2]
-[ext_resource path="res://scripts/ui/MainMenu.cs" type="Script" id=3]
+[ext_resource path="res://Sprites/ui/main.png" type="Texture" id=2]
+[ext_resource path="res://scripts/Ui/MainMenu.cs" type="Script" id=3]
 [ext_resource path="res://Nodes/ui/Fader.tscn" type="PackedScene" id=4]
 
 [sub_resource type="DynamicFont" id=1]

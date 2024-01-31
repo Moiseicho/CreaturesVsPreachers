@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+
 public class Zomble : KinematicBody2D
 {
 	[Export]
@@ -34,6 +35,8 @@ public class Zomble : KinematicBody2D
 
 	[Signal]
 	public delegate void _ZombleDied();
+
+	private const float MinSpeedCoef = 0.2f;
 
 	public override void _Ready()
 	{
@@ -182,8 +185,17 @@ public class Zomble : KinematicBody2D
 	
 	public void takeDamage(float damage, float knockback)
 	{
+		GD.Print("From Zomble number " + GetInstanceId());
 		health -= damage;
-		if(!stuck)tempSpeed = speed - knockback;
+		if(!stuck)
+		{
+			tempSpeed = tempSpeed - knockback;
+			if(tempSpeed < speed * MinSpeedCoef)
+			{
+				tempSpeed = speed * MinSpeedCoef;
+			}
+			GD.Print(tempSpeed);
+		}
 		GD.Print("took damage " + damage);
 	}
 

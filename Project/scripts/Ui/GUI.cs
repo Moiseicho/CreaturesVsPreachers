@@ -8,6 +8,7 @@ public class GUI : Menu
 	private Reactor reactor;
 	private Control menu;
 	private bool menuOpen = false;
+	private UpgradeMenu upgradeMenu;
 
 	public override void _Ready()
 	{
@@ -16,6 +17,10 @@ public class GUI : Menu
 		healthBar = (ProgressBar)GetNode("HUD/Rows/Top row/HealthBar/Percent");
 		menu = (Control)GetNode("PauseMenu");
 		reactor = (Reactor)GetNodeOrNull("../Reactor");
+		upgradeMenu = (UpgradeMenu)GetNode("UpgradeMenu");
+
+		upgradeMenu.Connect(nameof(UpgradeMenu.UpgradeMenuClose), this, nameof(closeUpgradeMenu));
+
 
 		player.Connect(nameof(Player._PlayerDied), this, nameof(_on_GameOver));
 		reactor.Connect(nameof(Reactor._ReactorDestroyed), this, nameof(_on_GameOver));
@@ -80,5 +85,15 @@ public class GUI : Menu
 		FadeOutExit();
 	}
 
-	
+	public void openUpgradeMenu()
+	{
+		GetTree().Paused = true;
+		upgradeMenu.Appear(player);
+	}
+
+	public void closeUpgradeMenu()
+	{
+		upgradeMenu.Visible = false;
+		GetTree().Paused = false;
+	}
 }

@@ -20,11 +20,18 @@ public class Spawner : Node
 	private Timer timer;
 	private Label label;
 
-	private int timeLeft = 10;
+	private int timeLeft = 5;
+
+	private GUI gui;
+
+	private void yippie()
+	{
+		GD.Print("yippie");
+	}
 
 	public override void _Ready()
 	{
-
+		gui = GetNode<GUI>("../GUI");
 		timer = GetNode<Timer>("Timer");
 		label = GetNode<Label>("Label");
 
@@ -87,7 +94,7 @@ public class Spawner : Node
 			timer.Stop();
 			label.Text = "DANGER!";
 			spawn(wave, subWave);
-			timeLeft = 60;
+			timeLeft = 15;
 		}
 	}
 
@@ -113,8 +120,6 @@ public class Spawner : Node
 		}
 	}
 
-
-
 	public async void OnZombleDied()
 	{
 		zomblesAlive--;
@@ -123,7 +128,7 @@ public class Spawner : Node
 			if(subWave < waveNumbers[wave].Count - 1)
 			{
 				subWave++;
-				await ToSignal(GetTree().CreateTimer(10f), "timeout");
+				await ToSignal(GetTree().CreateTimer(5f), "timeout");
 				spawn(wave, subWave);
 			}
 			else
@@ -133,12 +138,15 @@ public class Spawner : Node
 				
 				if(wave >= waveNumbers.Count)
 				{
-					//yippie();
+					label.Text = "You won!";
 					return;
 				}
+				gui.openUpgradeMenu();
 				timer.Start();
 				label.Text = timeLeft.ToString();
 			}
 		}
 	}
+
+
 }

@@ -16,6 +16,17 @@
             "subWaves":
             [
                 {
+                    "zomble": "8"
+                },
+                {
+                    "zomble": "10"
+                }
+            ]
+        },
+        {
+            "subWaves":
+            [
+                {
                     "zomble": "10"
                 },
                 {

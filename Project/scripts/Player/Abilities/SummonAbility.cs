@@ -2,9 +2,14 @@ using Godot;
 
 public class SummonAbility : Ability
 {
-	
 	private PackedScene summonableScene;
 	private bool isStatic = false;
+
+	public SummonAbility(PackedScene summonableScene, bool isStatic)
+	{
+		this.summonableScene = summonableScene;
+		this.isStatic = isStatic;
+	}
 
 	public void setIsStatic(bool isStatic)
 	{
