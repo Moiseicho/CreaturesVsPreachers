@@ -56,9 +56,15 @@ public class Weapon : AnimatedSprite
 		bullet.KnockBack = knockback;
 		bullet.FizleTime = fizleTime;
 		bullet.Speed = bulletSpeed;
-		bullet.Rotation = Rotation;
 		bullet.Pierce = pierce;
 		GetTree().Root.AddChild(bullet);
+		if(targetZomble != null)
+		{
+			bullet.LookAt(targetZomble.GetTransform().origin);
+		}else
+		{
+			bullet.Rotation = Rotation;
+		}
 	}
 
 	private void shoot()
@@ -130,7 +136,7 @@ public class Weapon : AnimatedSprite
 				}
 			}
 		}
-		if(closestDistanceSquared > 75000) return null;
+		if(closestDistanceSquared > 100000) return null;
 		return closestZomble;
 	}
 	
@@ -148,18 +154,12 @@ public class Weapon : AnimatedSprite
 			Offset = originalOffset;
 		}
 	}
-	
-	private Vector2 getDirectionToTarget()
-	{
-		return(targetZomble.GlobalTransform.origin - GlobalTransform.origin).Normalized();
-	}
 
 	public void gunlock()
 	{
 		if(targetZomble != null && reloadTimer <= 0f)
 		{
-			Vector2 directionToZomble = getDirectionToTarget();
-			LookAt(GlobalTransform.origin + directionToZomble);
+			LookAt(targetZomble.GetTransform().origin);
 		}else
 		{
 			Player player = (Player)GetParent();
@@ -188,7 +188,6 @@ public class Weapon : AnimatedSprite
 			manualReload();
 		}
 	}
-
 
 	public void disable()
 	{
