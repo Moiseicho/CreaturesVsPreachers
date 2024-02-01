@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/Enemies/Zomble.cs" type="Script" id=1]
-[ext_resource path="res://elgama - Copy/zomble/zomble sheet.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/zomble/zomble sheet.png" type="Texture" id=2]
 
 [sub_resource type="Animation" id=1]
 length = 0.001

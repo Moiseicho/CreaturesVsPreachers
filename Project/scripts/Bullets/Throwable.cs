@@ -4,16 +4,24 @@ public class Throwable : Bullet
 {
 
 	private bool hold = true;
-	private AnimationPlayer ap;
 	private float maxSpeed;
 	[Export]
 	private float airSlowdown;
+	[Export]
+	public float Speed {get{return speed;}set{speed = value;}}
+	[Export]
+	public float FizleTime {get{return fizleTime;}set{fizleTime = value;}}
+	[Export]
+	public float Damage {get{return damage;}set{damage = value;}}
+	[Export]
+	public float KnockBack {get{return knockBack;}set{knockBack = value;}}
+	[Export]
+	public int Pierce {get{return pierce;}set{pierce = value;}}
 
 	public override void _Ready()
 	{
 		base._Ready();
-		ap = (AnimationPlayer)GetNode("AnimationPlayer");
-		ap.CurrentAnimation = "Hold";
+		sprite.Animation = "hold";
 		maxSpeed = speed;
 	}
 
@@ -28,7 +36,7 @@ public class Throwable : Bullet
 	{
 		LookAt(GetGlobalMousePosition());
 		hold = false;
-		ap.CurrentAnimation = "Throw";
+		sprite.Animation = "throw";
 	}
 
 	protected override void _on_Bullet_area_entered(Area2D area)

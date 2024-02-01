@@ -2,7 +2,7 @@ using Godot;
 
 public class ThrowAbility : Ability
 {
-	
+	[Export]
 	private PackedScene bulletScene;
 
 	public void setBulletScene(PackedScene bulletScene)

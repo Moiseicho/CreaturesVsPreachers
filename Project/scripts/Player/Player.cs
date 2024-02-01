@@ -9,10 +9,10 @@ public class Player : KinematicBody2D
 	private bool right = true;
 	private bool dead = false;
 
-	private Ability ability1;
+	private Ability ability1 = null;
 	private float ability1Cooldown;
 	private float ability1Timer = 0f;
-	private Ability ability2;
+	private Ability ability2 = null;
 	private float ability2Cooldown;
 	private float ability2Timer = 0f;
 	
@@ -51,22 +51,23 @@ public class Player : KinematicBody2D
 			}
 		}
 
-		ThrowAbility temp = new ThrowAbility();
+		/*ThrowAbility temp = new ThrowAbility();
 		temp.setBulletScene((PackedScene)ResourceLoader.Load("res://Nodes/bullets/throwables/ToxicGrenade.tscn"));
 		temp.Player = this;
 		temp.Cooldown = 5f;
 		
 		ability1 = temp;
-		ability1Cooldown = ability1.getCooldown();
+		ability1Cooldown = ability1.Cooldown;
 
-		SummonAbility temp2 = new SummonAbility();
-		temp2.setSummonableScene((PackedScene)ResourceLoader.Load("res://Nodes/Summonables/StaticSummonables/IceWall.tscn"));
+		SummonAbility temp2 = new SummonAbility(
+			(PackedScene)ResourceLoader.Load("res://Nodes/Summonables/StaticSummonables/IceWall.tscn"),
+			true
+			);
 		temp2.Player = this;
 		temp2.Cooldown = 5f;
-		temp2.setIsStatic(true);
 		
 		ability2 = temp2;
-		ability2Cooldown = ability2.getCooldown();
+		ability2Cooldown = ability2.Cooldown;*/
 		
 	}
 
@@ -147,6 +148,7 @@ public class Player : KinematicBody2D
 		}
 
 
+
 		manageAnimation(moving);
 		manageTimers(delta);
 		
@@ -209,5 +211,38 @@ public class Player : KinematicBody2D
 		throwable.Position = new Vector2(20, 0) * (right ? 1 : -1);
 		AddChild(throwable);
 		abilityEquiped = true;
+	}
+
+	public void buffStats(float speedBuff, float healthBuff)
+	{
+		defaultSpeed += speedBuff;
+		speed = defaultSpeed;
+		maxHp += healthBuff;
+		hp += healthBuff;
+	}
+
+	public void Give(Weapon newWeapon)
+	{
+		weapon.QueueFree();
+		AddChild(newWeapon);
+		weapon = newWeapon;
+	}
+
+	public void Give(Ability ability)
+	{
+		if(ability1 == null)
+		{
+			ability1 = ability;
+			ability1.Player = this;
+			ability1Cooldown = ability1.Cooldown;
+			//configure UI
+		}
+		else if(ability2 == null)
+		{
+			ability2 = ability;
+			ability2.Player = this;
+			ability2Cooldown = ability2.Cooldown;
+			//configure UI
+		}
 	}
 }

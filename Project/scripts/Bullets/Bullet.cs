@@ -9,41 +9,36 @@ public class Bullet : KinematicBody2D
 	protected float knockBack = 5;
 	protected int pierce = 0;
 	
-	protected Sprite sprite;
+	protected AnimatedSprite sprite;
 	protected Area2D collision;
 	[Export]
 	protected EffectOnHit effectOnHit;
 	[Export]
 	protected PackedScene effectOnFizleScene;
 
-	[Export]
 	public float Speed
 	{
 		get { return speed; }
 		set { speed = value; }
 	}
-	[Export]
 	public int Pierce
 	{
 		get { return pierce; }
 		set { pierce = value; }
 	}
 
-	[Export]
 	public float FizleTime
 	{
 		get { return fizleTime; }
 		set { fizleTime = value; }
 	}
 
-	[Export]
 	public float Damage
 	{
 		get { return damage; }
 		set { damage = value; }
 	}
 
-	[Export]
 	public float KnockBack
 	{
 		get { return knockBack; }
@@ -52,7 +47,8 @@ public class Bullet : KinematicBody2D
 
 	public override void _Ready()
 	{
-		sprite = (Sprite)GetNode("Sprite");
+		sprite = (AnimatedSprite)GetNode("AnimatedSprite");
+		sprite.Playing = true;
 		collision = (Area2D)GetNode("Area2D");
 		collision.Connect("area_entered", this, nameof(_on_Bullet_area_entered));
 	}
@@ -102,7 +98,7 @@ public class Bullet : KinematicBody2D
 			pierce--;
 			return;
 		}
-		if (!area.IsInGroup("enemy") && !area.IsInGroup("playerHB") && !area.IsInGroup("reactorHB"))
+		if (!area.IsInGroup("enemy") && !area.IsInGroup("playerHB") && !area.IsInGroup("reactorHB") && !area.IsInGroup("ground"))
 		{
 			Fizle();
 		}

@@ -14,6 +14,8 @@ public class EffectOnFizle : Area2D
 	private float entryTime;
 	[Export]
 	private float fadeTime;
+	[Export]
+	private bool oneHit;
 	
 	private Timer tickTimer;
 
@@ -40,6 +42,7 @@ public class EffectOnFizle : Area2D
 
 		tickTimer = new Timer();
 		tickTimer.WaitTime = tickTime;
+		tickTimer.OneShot = !oneHit;
 		AddChild(tickTimer);
 		tickTimer.Connect("timeout", this, nameof(Tick));
 
@@ -55,6 +58,11 @@ public class EffectOnFizle : Area2D
 
 	private void FadeOut()
 	{
+		if(fadeTime == 0) 
+		{
+			removeEffect();
+			return;
+		}
 		animatedSprite.Animation = "fade";
 		Timer timer = new Timer();
 		timer.WaitTime = fadeTime;

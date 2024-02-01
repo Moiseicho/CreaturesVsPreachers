@@ -1,6 +1,8 @@
-public class Ability
-{
+using Godot;
+using System;
 
+public class Ability : Node
+{
 	protected float cooldown = 0f;
 	protected Player player;
 
@@ -18,10 +20,5 @@ public class Ability
 	public virtual void Effect()
 	{
 		// Implementation goes here
-	}
-
-	public float getCooldown()
-	{
-		return cooldown;
 	}
 }

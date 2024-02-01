@@ -1,8 +1,9 @@
 [gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scripts/Summonables/StaticSummon.cs" type="Script" id=1]
-[ext_resource path="res://elgama - Copy/abilities/iceWall/IceWallActivation.png" type="Texture" id=2]
-[ext_resource path="res://elgama - Copy/abilities/iceWall/IceWall.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/abilities/iceWall/IceWallActivation.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/abilities/iceWall/IceWall.png" type="Texture" id=3]
+
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 2 )
