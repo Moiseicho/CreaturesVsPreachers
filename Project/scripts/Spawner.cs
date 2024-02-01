@@ -7,10 +7,11 @@ using IO = System.IO;
 public class Spawner : Node
 {
 	private List<List<Dictionary<string, int>>> waveNumbers;
-	private List<PackedScene> zombles;
 
 	[Export]
 	private List<Vector2> spawnPoints;
+
+	private const string folderPath = "res://Nodes/zombles";
 
 	private int zomblesAlive = 0;
 
@@ -37,20 +38,7 @@ public class Spawner : Node
 
 		label.Text = timeLeft.ToString();
 
-
-		string folderPath = "res://Nodes/zombles";
-		folderPath = ProjectSettings.GlobalizePath(folderPath);
-		string[] files = IO.Directory.GetFiles(folderPath, "*.tscn");
-		zombles = new List<PackedScene>();
-
-		foreach (string file in files)
-		{
-			string fixedFile = file.Replace('\\', '/');
-			PackedScene zomble = (PackedScene)ResourceLoader.Load(fixedFile);
-			zomble.ResourceName = fixedFile.Substring(fixedFile.LastIndexOf('/') + 1).Replace(".tscn", "");
-			zombles.Add(zomble);
-			
-		}
+		
 
 		waveNumbers = new List<List<Dictionary<string, int>>>();
 		Godot.File f = new Godot.File();
@@ -100,15 +88,13 @@ public class Spawner : Node
 
 	public async void spawn(int wave, int subWave)
 	{
-		for (int i = 0; i < zombles.Count; i++)
+		Dictionary<string, int> zombleNumber = waveNumbers[wave][subWave];
+		foreach (string zomble in zombleNumber.Keys)
 		{
-			if(wave >= waveNumbers.Count)break;
-			if(subWave >= waveNumbers[wave].Count)break;
-			if(!waveNumbers[wave][subWave].ContainsKey(zombles[i].ResourceName))continue;
-
-			for (int y = 0; y < waveNumbers[wave][subWave][zombles[i].ResourceName]; y++)
+			for (int i = 0; i < zombleNumber[zomble]; i++)
 			{
-				Zomble zombleInstance = zombles[i].Instance() as Zomble;
+				PackedScene zombleScene = GD.Load<PackedScene>(folderPath + "/" + zomble + ".tscn");
+				Zomble zombleInstance = zombleScene.Instance() as Zomble;
 				zombleInstance.Position = spawnPoints[new Random().Next(0, spawnPoints.Count)];
 				zombleInstance.Connect("_ZombleDied", this, nameof(OnZombleDied));
 				zomblesAlive++;
