@@ -125,6 +125,7 @@ public class Spawner : Node
 				if(wave >= waveNumbers.Count)
 				{
 					label.Text = "You won!";
+					gui.victory();
 					return;
 				}
 				gui.openUpgradeMenu();

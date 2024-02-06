@@ -33,6 +33,9 @@ public class Player : KinematicBody2D
 	[Signal]
 	public delegate void _PlayerDied();
 
+	[Signal]
+	public delegate void _NewAbility();
+
 	public override void _Ready()
 	{
 
@@ -50,24 +53,6 @@ public class Player : KinematicBody2D
 				weapon = (Weapon)child;
 			}
 		}
-
-		/*ThrowAbility temp = new ThrowAbility();
-		temp.setBulletScene((PackedScene)ResourceLoader.Load("res://Nodes/bullets/throwables/ToxicGrenade.tscn"));
-		temp.Player = this;
-		temp.Cooldown = 5f;
-		
-		ability1 = temp;
-		ability1Cooldown = ability1.Cooldown;
-
-		SummonAbility temp2 = new SummonAbility(
-			(PackedScene)ResourceLoader.Load("res://Nodes/Summonables/StaticSummonables/IceWall.tscn"),
-			true
-			);
-		temp2.Player = this;
-		temp2.Cooldown = 5f;
-		
-		ability2 = temp2;
-		ability2Cooldown = ability2.Cooldown;*/
 		
 	}
 
@@ -75,8 +60,6 @@ public class Player : KinematicBody2D
 	{
 		ap.CurrentAnimation = animation;
 	}
-
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(float delta)
 	{	
 		if(dead)
@@ -235,14 +218,59 @@ public class Player : KinematicBody2D
 			ability1 = ability;
 			ability1.Player = this;
 			ability1Cooldown = ability1.Cooldown;
-			//configure UI
+			EmitSignal(nameof(_NewAbility));
 		}
 		else if(ability2 == null)
 		{
 			ability2 = ability;
 			ability2.Player = this;
 			ability2Cooldown = ability2.Cooldown;
-			//configure UI
+			EmitSignal(nameof(_NewAbility));
 		}
+	}
+
+	public float getAbilityQCooldownPercent()
+	{
+		if(ability1 == null)
+		{
+			return 100;
+		}
+		return ability1Timer/ability1Cooldown * 100;
+	}
+
+	public float getAbilityECooldownPercent()
+	{
+		if(ability2 == null)
+		{
+			return 100;
+		}
+		return ability2Timer/ability2Cooldown * 100;
+	}
+
+	public Texture getAbilityQImage()
+	{
+		if(ability1 == null)
+		{
+			return null;
+		}
+		return ability1.getImage();
+	}
+
+	public Texture getAbilityEImage()
+	{
+		if(ability2 == null)
+		{
+			return null;
+		}
+		return ability2.getImage();
+	}
+
+	public int getAmmo()
+	{
+		return weapon.getAmmo();
+	}
+	public int getAmmoCapacity()
+	{
+		return weapon.getAmmoCapacity();
 	}
 }

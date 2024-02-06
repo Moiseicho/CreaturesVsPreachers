@@ -70,5 +70,10 @@ public class Fader : Control
 	{
 		ap.CurrentAnimation = "FadeOutDied";
 	}
+	
+	public void FadeOut()
+	{
+		ap.CurrentAnimation = "FadeOut";
+	}
 }
 

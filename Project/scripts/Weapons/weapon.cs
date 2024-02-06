@@ -2,7 +2,7 @@ using Godot;
 using System;
 using Godot.Collections;
 
-public class Weapon : AnimatedSprite
+public class Weapon : AnimatedSprite, Giveable
 {
 	
 	[Export]
@@ -25,9 +25,10 @@ public class Weapon : AnimatedSprite
 	private float fizleTime = 0.5f;
 	private int pierce = 0;
 	
-	private float ammo;
+	private int ammo;
 	private float fireTimer = 0f;
 	private float reloadTimer = 0f;
+	private Texture image;
 	
 	private bool disabled = false;
 	
@@ -209,5 +210,28 @@ public class Weapon : AnimatedSprite
 		ammo = ammoCapacity;
 		reloadTimer = reloadTime;
 		this.Animation = "reload";
+	}
+
+	public void setImage(Texture image)
+	{
+		this.image = image;
+	}
+
+	public Texture getImage()
+	{
+		return image;
+	}
+
+	public int getAmmo()
+	{
+		if(reloadTime == 0)
+		{
+			return -1;
+		}
+		return (int)ammo;
+	}
+	public int getAmmoCapacity()
+	{
+		return ammoCapacity;
 	}
 }

@@ -65,7 +65,8 @@ public class UpgradeMenu : TextureRect
 			{
 				string itemPath = (string)upgrade["itemPath"];
 				PackedScene itemScene = ResourceLoader.Load(itemPath) as PackedScene;
-				giveUpgrade = new GiveUpgrade(itemScene.Instance());
+				giveUpgrade = new GiveUpgrade(itemScene.Instance() as Giveable);
+				giveUpgrade.setImage(ResourceLoader.Load(upgrade["imagePath"] as string) as Texture);
 			}else if(upgrade.Contains("ability") && upgrade["ability"] != null)
 			{
 				Godot.Collections.Dictionary ability = upgrade["ability"] as Godot.Collections.Dictionary;
@@ -75,11 +76,13 @@ public class UpgradeMenu : TextureRect
 					tempThrow.setBulletScene(ResourceLoader.Load(ability["bulletPath"] as string) as PackedScene);
 					tempThrow.Cooldown = (float)ability["cooldown"];
 					giveUpgrade = new GiveUpgrade(tempThrow);
+					giveUpgrade.setImage(ResourceLoader.Load(upgrade["imagePath"] as string) as Texture);
 				}else if(ability["type"] as string == "summon")
 				{
 					SummonAbility tempSummon = new SummonAbility(ResourceLoader.Load(ability["summonPath"] as string) as PackedScene, (bool)ability["isStatic"]);
 					tempSummon.Cooldown = (float)ability["cooldown"];
 					giveUpgrade = new GiveUpgrade(tempSummon);
+					giveUpgrade.setImage(ResourceLoader.Load(upgrade["imagePath"] as string) as Texture);
 				}
 			}
 			Texture texture = ResourceLoader.Load(upgrade["imagePath"] as string) as Texture;

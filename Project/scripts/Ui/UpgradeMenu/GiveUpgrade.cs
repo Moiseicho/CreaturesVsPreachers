@@ -2,15 +2,15 @@ using Godot;
 
 public class GiveUpgrade : Object
 {
-	private object item;
+	private Giveable item;
 
-	public object Item
+	public Giveable Item
 	{
 		get { return item; }
 		set { item = value; }
 	}
 
-	public GiveUpgrade(object item)
+	public GiveUpgrade(Giveable item)
 	{
 		this.item = item;
 	}
@@ -25,5 +25,10 @@ public class GiveUpgrade : Object
 		{
 			player.Give((Weapon) item);
 		}
+	}
+
+	public void setImage(Texture image)
+	{
+		item.setImage(image);
 	}
 }

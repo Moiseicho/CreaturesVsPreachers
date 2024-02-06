@@ -1,6 +1,6 @@
 using Godot;
 
-public class StaticSummon : Summonable
+public class StaticSummon : StaticBody2D, Summonable
 {
 
 	[Export]
@@ -102,7 +102,7 @@ public class StaticSummon : Summonable
 		QueueFree();
 	}
 
-	public override void Summon()
+	public void Summon()
 	{
 		Position = position;
 		if (playerRelative)
