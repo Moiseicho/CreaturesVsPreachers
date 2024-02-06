@@ -185,6 +185,7 @@ public class Zomble : KinematicBody2D
 	
 	public void takeDamage(float damage, float knockback)
 	{
+		if(frozen) return;
 		GD.Print("From Zomble number " + GetInstanceId());
 		health -= damage;
 		if(!stuck)

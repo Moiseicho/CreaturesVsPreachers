@@ -2,13 +2,10 @@ using Godot;
 
 public class Menu : Node
 {
-	
-	AnimationPlayer ap;
 	protected Fader fader;
 	
 	public override void _Ready()
 	{
-		ap = (AnimationPlayer)GetNode("Fader/AnimationPlayer");
 		fader = (Fader)GetNode("Fader");
 
 		fader.Connect(nameof(Fader._Retry_after_death), this, nameof(ChangeSceneAfterTimer), new Godot.Collections.Array() {"res://Nodes/sceneTest.tscn"});
@@ -18,7 +15,7 @@ public class Menu : Node
 
 	protected void FadeOut(string scene)
 	{
-		ap.CurrentAnimation = "FadeOut";
+		fader.FadeOut();
 		
 		Timer timer = new Timer();
 		timer.WaitTime = 0.5f;
@@ -30,7 +27,7 @@ public class Menu : Node
 
 	protected void FadeOutExit()
 	{
-		ap.CurrentAnimation = "FadeOut";
+		fader.FadeOut();
 		
 		Timer timer = new Timer();
 		timer.WaitTime = 0.5f;
@@ -42,7 +39,7 @@ public class Menu : Node
 
 	protected void FadeOutDied()
 	{
-		ap.CurrentAnimation = "FadeOutDied";
+		fader.FadeOutDied();
 	}
 
 	private void ChangeSceneAfterTimer(string scene)

@@ -9,6 +9,11 @@ public class GUI : Menu
 	private Control menu;
 	private bool menuOpen = false;
 	private UpgradeMenu upgradeMenu;
+	private TextureRect abilityQImage = null;
+	private TextureRect abilityEImage = null;
+	private TextureProgress abilityQCooldown;
+	private TextureProgress abilityECooldown;
+	private Label ammoCounter;
 
 	public override void _Ready()
 	{
@@ -18,6 +23,11 @@ public class GUI : Menu
 		menu = (Control)GetNode("PauseMenu");
 		reactor = (Reactor)GetNodeOrNull("../Reactor");
 		upgradeMenu = (UpgradeMenu)GetNode("UpgradeMenu");
+		abilityQImage = (TextureRect)GetNode("HUD/Rows/Bottom row/Qsquare/Texture");
+		abilityEImage = (TextureRect)GetNode("HUD/Rows/Bottom row/Esquare/Texture");
+		abilityQCooldown = (TextureProgress)GetNode("HUD/Rows/Bottom row/Qsquare/Cooldown");
+		abilityECooldown = (TextureProgress)GetNode("HUD/Rows/Bottom row/Esquare/Cooldown");
+		ammoCounter = (Label)GetNode("HUD/TextureRect/Label");
 
 		upgradeMenu.Connect(nameof(UpgradeMenu.UpgradeMenuClose), this, nameof(closeUpgradeMenu));
 
@@ -35,6 +45,19 @@ public class GUI : Menu
 	public override void _Process(float delta)
 	{
 		healthBar.Value = player.getHpPercent();
+		abilityQCooldown.Value = player.getAbilityQCooldownPercent();
+		abilityECooldown.Value = player.getAbilityECooldownPercent();
+		abilityQImage.Texture = player.getAbilityQImage();
+		abilityEImage.Texture = player.getAbilityEImage();
+		int ammo = player.getAmmo();
+		if (ammo == -1)
+		{
+			ammoCounter.Text = "inf.";
+		}
+		else
+		{
+			ammoCounter.Text = ammo.ToString() + "/" + player.getAmmoCapacity();
+		}
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -95,5 +118,10 @@ public class GUI : Menu
 	{
 		upgradeMenu.Visible = false;
 		GetTree().Paused = false;
+	}
+
+	public void victory()
+	{
+		FadeOut("res://Nodes/ui/VictoryScreen.tscn");
 	}
 }

@@ -1,6 +1,6 @@
 using Godot;
 
-public abstract class Summonable : Node2D
+public interface Summonable
 {
-	public abstract void Summon();
+	void Summon();
 }

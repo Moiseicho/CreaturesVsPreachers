@@ -15,7 +15,7 @@
                     "text":"IceWall",
                     "ability":{
                         "type":"summon",
-                        "cooldown": 20,
+                        "cooldown": 40,
                         "summonPath":"res://Nodes/Summonables/StaticSummonables/IceWall.tscn",
                         "isStatic":true
                     },
