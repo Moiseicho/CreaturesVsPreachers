@@ -1,6 +1,7 @@
 {
     "waves":
     [
+        
         {
             "subWaves":
             [
@@ -16,10 +17,12 @@
             "subWaves":
             [
                 {
-                    "zomble": "8"
+                    "zomble": "3",
+                    "bomber": "1"
                 },
                 {
-                    "zomble": "10"
+                    "zomble": "10",
+                    "bomber": "1"
                 }
             ]
         },
@@ -27,10 +30,12 @@
             "subWaves":
             [
                 {
-                    "zomble": "10"
+                    "zomble": "10",
+                    "bomber": "1"
                 },
                 {
-                    "zomble": "15"
+                    "zomble": "15",
+                    "bomber": "2"
                 }
             ]
         }

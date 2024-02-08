@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/smgshop.png-23c057ab63b6abd30a565187a2c3ce22.stex"
+path="res://.import/bomber_caboom.png-38e0fab458de4d12a2d8678dd321cbb1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/weapons/SMG/smgshop.png"
-dest_files=[ "res://.import/smgshop.png-23c057ab63b6abd30a565187a2c3ce22.stex" ]
+source_file="res://Sprites/zomble/bomber run/bomber_caboom.png"
+dest_files=[ "res://.import/bomber_caboom.png-38e0fab458de4d12a2d8678dd321cbb1.stex" ]
 
 [params]
 

@@ -90,12 +90,16 @@ public class Bullet : KinematicBody2D
 
 	protected virtual void _on_Bullet_area_entered(Area2D area)
 	{
+		if(pierce < 0)
+		{
+			return;
+		}
 		if (area.IsInGroup("enemyHitbox"))
 		{
+			pierce--;
 			Zomble zomble = (Zomble)area.GetParent();
 			zomble.takeDamage(damage, knockBack);
-			if(pierce <= 0)Fizle();
-			pierce--;
+			if(pierce < 0)Fizle();
 			return;
 		}
 		if (!area.IsInGroup("enemy") && !area.IsInGroup("playerHB") && !area.IsInGroup("reactorHB") && !area.IsInGroup("ground"))

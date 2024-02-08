@@ -3,10 +3,7 @@
             "subWaves":
             [
                 {
-                    "zomble": "5"
-                },
-                {
-                    "zomble": "7"
+                    "zomble": "1"
                 }
             ]
         },
@@ -14,10 +11,7 @@
             "subWaves":
             [
                 {
-                    "zomble": "8"
-                },
-                {
-                    "zomble": "10"
+                    "zomble": "1"
                 }
             ]
         },
@@ -25,10 +19,7 @@
             "subWaves":
             [
                 {
-                    "zomble": "10"
-                },
-                {
-                    "zomble": "15"
+                    "zomble": "1"
                 }
             ]
         }

@@ -27,7 +27,6 @@ frames = SubResource( 1 )
 animation = "idle"
 offset = Vector2( 20, 5 )
 script = ExtResource( 4 )
-damagePerBullet = 2.0
 fireRate = 5.0
 ammoCapacity = 30
 knockback = 2000.0

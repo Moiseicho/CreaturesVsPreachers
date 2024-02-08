@@ -7,7 +7,7 @@ public class Reactor : StaticBody2D
 	private float health;
 
 	[Export]
-	private float maxHealth = 1000;
+	private float maxHealth = 150;
 	private Label label;
 	private AnimationPlayer animationPlayer;
 

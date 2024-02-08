@@ -14,6 +14,8 @@ public class StaticSummon : StaticBody2D, Summonable
 	private float effectTime = 0;
 	[Export]
 	private float fadeTime = 0;
+	[Export]
+	private float freezeTime = 0;
 	private AnimatedSprite animatedSprite;
 	[Export]
 	private bool freezeEnabled = true;
@@ -48,11 +50,18 @@ public class StaticSummon : StaticBody2D, Summonable
 		AddChild(entryTimer);
 		entryTimer.Connect("timeout", this, nameof(Default));
 
+		Timer freezeTimer = new Timer();
+		freezeTimer.WaitTime = freezeTime;
+		freezeTimer.OneShot = true;
+		AddChild(freezeTimer);
+		freezeTimer.Connect("timeout", this, nameof(Freeze));
+
 		effectTimer.Start();
 		entryTimer.Start();
+		freezeTimer.Start();
 	}
 
-	private void Default()
+	private void Freeze()
 	{
 		if (freezeEnabled)
 		{
@@ -64,9 +73,12 @@ public class StaticSummon : StaticBody2D, Summonable
 					zomble.freeze();
 				}
 			}
-			
 			collisionPolygon2D.Disabled = false;
 		}
+	}
+
+	private void Default()
+	{
 		animatedSprite.Animation = "default";
 	}
 
@@ -112,6 +124,11 @@ public class StaticSummon : StaticBody2D, Summonable
 		{
 			player.GetTree().Root.AddChild(this);
 		}
+	}
+
+	public override void _ExitTree()
+	{
+		QueueFree();
 	}
 
 }

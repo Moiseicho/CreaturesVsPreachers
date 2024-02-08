@@ -4,6 +4,11 @@ using System;
 
 public class Zomble : KinematicBody2D
 {
+	private bool died = false;
+	[Export]
+	private bool suicide = false;
+	[Export]
+	private float biteDelay = 0.4f;
 	[Export]
 	private int minSpeed = 0;
 	[Export]
@@ -15,6 +20,9 @@ public class Zomble : KinematicBody2D
 	private float tempSpeed = 0f;
 	private float speed = 0f;
 	[Export]
+	private int minPlayerTargetRadius;
+	[Export]
+	private int maxPlayerTargetRadius;
 	private float playerTargetRadius;
 	private Player player;
 	private float damage;
@@ -22,8 +30,7 @@ public class Zomble : KinematicBody2D
 	[Export]
 	private float maxHealth = 20;
 	
-	private AnimationPlayer animationPlayer;
-	private Sprite sprite;
+	private AnimatedSprite animatedSprite;
 	private Timer timer;
 	private bool biting = false;
 	private Area2D biteBox;
@@ -41,24 +48,30 @@ public class Zomble : KinematicBody2D
 	public override void _Ready()
 	{
 		player = (Player)GetNode("../Player");
-		sprite = (Sprite)GetNode("Sprite");
 		biteBox = (Area2D)GetNode("BiteBox");
-		animationPlayer = (AnimationPlayer)GetNode("AnimationPlayer");
+		animatedSprite = (AnimatedSprite)GetNode("AnimatedSprite");
 		reactor = (Reactor)GetNode("../Reactor");
-		animationPlayer.CurrentAnimation = "walk";
+		animatedSprite.Animation = "walk";
 		timer = new Timer();
 		AddChild(timer);
 		health = maxHealth;
+
+		animatedSprite.Play();
 
 		Random random = new Random();
 
 		speed = random.Next(minSpeed, maxSpeed);
 		tempSpeed = speed;
-		playerTargetRadius = random.Next(0, 1000);
+		if(minPlayerTargetRadius == maxPlayerTargetRadius)
+		{
+			playerTargetRadius = (float)minPlayerTargetRadius / 100;
+		}
+		else{
+			playerTargetRadius = (float)random.Next(minPlayerTargetRadius, maxPlayerTargetRadius) / 100;
+		}
 		damage = random.Next(minDamage, maxDamage);
 
 		timer.Connect("timeout", this, nameof(OnBiteHit));
-		animationPlayer.Connect("animation_finished", this, nameof(OnAnimationFinished));
 
 		slowDownTimer = new Timer();
 		AddChild(slowDownTimer);
@@ -68,13 +81,26 @@ public class Zomble : KinematicBody2D
 
 	public void manageLife()
 	{
-		if(health <= 0)
+		if(health <= 0  && !died)
 		{
-			EmitSignal(nameof(_ZombleDied));
-			QueueFree();
+			die();
 		}
 	}
 
+	public void die()
+	{
+		died = true;
+		if(suicide)
+		{
+			animatedSprite.Animation = "bite";
+			StartWait(biteDelay);
+			biting = true;
+			return;
+		}
+		
+		EmitSignal(nameof(_ZombleDied));
+		QueueFree();
+	}
 
 	public override void _Process(float delta)
 	{
@@ -86,9 +112,10 @@ public class Zomble : KinematicBody2D
 
 		bool playerT = true;
 		Vector2 direction = (player.Position - Position);
-		if(direction.Length() > playerTargetRadius)
+		Vector2 reactorDirection = (reactor.Position - Position);
+		if(direction.Length()/(reactorDirection.Length()) > playerTargetRadius)
 		{
-			direction = (reactor.Position - Position);
+			direction = reactorDirection;
 			playerT = false;
 		}
 		Vector2 movement = direction.Normalized() * tempSpeed * delta;
@@ -99,7 +126,7 @@ public class Zomble : KinematicBody2D
 				biteBox.Position *= new Vector2(-1, 1);
 				right = false;
 			}
-			sprite.FlipH = true;
+			animatedSprite.FlipH = true;
 			
 		}else
 		{
@@ -108,7 +135,7 @@ public class Zomble : KinematicBody2D
 				biteBox.Position *= new Vector2(-1, 1);
 				right = true;
 			}
-			sprite.FlipH = false;
+			animatedSprite.FlipH = false;
 		}
 		if(!playerT)
 		{
@@ -116,20 +143,19 @@ public class Zomble : KinematicBody2D
 			{
 				if (area.IsInGroup("reactorHB"))
 				{
-					animationPlayer.CurrentAnimation = "bite";
-					StartWait(0.4f);
+					animatedSprite.Animation = "bite";
+					StartWait(biteDelay);
 					biting = true;
 					return;
 				}
 			}
-		}else if( direction.Length() < 35f)
+		}else if(direction.Length() < 35f)
 		{
-			animationPlayer.CurrentAnimation = "bite";
-			StartWait(0.4f);
+			animatedSprite.Animation = "bite";
+			StartWait(biteDelay);
 			biting = true;
 			return;
 		}
-		animationPlayer.CurrentAnimation = "walk";
 		MoveAndSlide(movement);
 		ManageSpeed(delta);
 	}
@@ -144,14 +170,6 @@ public class Zomble : KinematicBody2D
 		if(tempSpeed > speed)
 		{
 			tempSpeed = speed;
-		}
-	}
-
-	private void OnAnimationFinished(string animationName)
-	{
-		if(animationName == "bite")
-		{
-			biting = false;
 		}
 	}
 
@@ -195,7 +213,6 @@ public class Zomble : KinematicBody2D
 			{
 				tempSpeed = speed * MinSpeedCoef;
 			}
-			GD.Print(tempSpeed);
 		}
 		GD.Print("took damage " + damage);
 	}
@@ -206,13 +223,11 @@ public class Zomble : KinematicBody2D
 		slowDownTimer.Stop();
 		slowDownTimer.WaitTime = duration;
 		slowDownTimer.Start();
-		GD.Print("stuck");
 		stuck = true;
  	}
 
 	private void unstuck()
 	{
-		GD.Print("unstuck");
 		stuck = false;
 		slowDownTimer.Stop();
 	}
@@ -220,12 +235,27 @@ public class Zomble : KinematicBody2D
 	public void freeze()
 	{
 		frozen = true;
-		animationPlayer.Stop();
+		animatedSprite.Stop();
 	}
 	public void unfreeze()
 	{
 		frozen = false;
-		animationPlayer.Play();
+		animatedSprite.Play();
+	}
+
+	private void _on_AnimatedSprite_animation_finished()
+	{
+		if(animatedSprite.Animation == "bite")
+		{
+			if(suicide)
+			{
+				EmitSignal(nameof(_ZombleDied));
+				QueueFree();
+			}
+			biting = false;
+			animatedSprite.Animation = "walk";
+		}
 	}
 
 }
+

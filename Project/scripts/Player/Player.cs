@@ -173,6 +173,7 @@ public class Player : KinematicBody2D
 		{
 			EmitSignal(nameof(_PlayerDied));
 			dead = true;
+			GD.Print("died polayer");
 			//animation to dead
 		}
 	}
