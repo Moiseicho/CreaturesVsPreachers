@@ -1,9 +1,9 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://scripts/Summonables/StaticSummon.cs" type="Script" id=1]
 [ext_resource path="res://Sprites/abilities/iceWall/IceWallActivation.png" type="Texture" id=2]
 [ext_resource path="res://Sprites/abilities/iceWall/IceWall.png" type="Texture" id=3]
-
+[ext_resource path="res://Sprites/zomble/zomble sheet.png" type="Texture" id=4]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 2 )
@@ -49,6 +49,11 @@ region = Rect2( 128, 0, 128, 128 )
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 128, 128 )
 
+[sub_resource type="AtlasTexture" id=15]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 2560, 0, 640, 640 )
+
 [sub_resource type="SpriteFrames" id=8]
 animations = [ {
 "frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
@@ -61,29 +66,95 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ) ],
-"loop": true,
+"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 15 ) ],
+"loop": false,
 "name": "fade",
 "speed": 12.0
 } ]
+
+[sub_resource type="Animation" id=14]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("PlayerBlocker:collision_mask")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 4 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("PlayerBlocker:collision_layer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 4 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("PlayerBlocker:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0.1, 0.1 ) ]
+}
+
+[sub_resource type="Animation" id=13]
+resource_name = "expand"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("PlayerBlocker:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.1, 0.1 ), Vector2( 1, 1 ) ]
+}
 
 [node name="IceWall" type="StaticBody2D"]
 modulate = Color( 1, 1, 1, 0.627451 )
 position = Vector2( -235, -140 )
 scale = Vector2( 3.5, 3.5 )
 z_index = 8
+collision_layer = 2
+collision_mask = 2
 script = ExtResource( 1 )
 position = Vector2( -235, -140 )
 entryTime = 0.6
 effectTime = 10.0
-fadeTime = 0.3
+fadeTime = 0.5
+freezeTime = 0.3
+
+[node name="PlayerBlocker" type="StaticBody2D" parent="."]
+scale = Vector2( 0.1, 0.1 )
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PlayerBlocker"]
+polygon = PoolVector2Array( -12, -57, -31, -45, -32, -37, -48, -11, -54, -6, -62, 40, 2, 64, 63, 44, 45, -31, -12, -57 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 8 )
 animation = "fade"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PoolVector2Array( -12, -57, -31, -45, -32, -37, -48, -11, -54, -6, -62, 40, 2, 64, 63, 44, 45, -31, -12, -57, -12, -50, 39, -27, 56, 40, 3, 58, -57, 37, -49, -4, -44, -8, -29, -34, -28, -43, -12, -50 )
+polygon = PoolVector2Array( -12, -57, -31, -45, -35.4286, -37.7143, -51.4286, -13.1429, -54, -6, -62, 40, 2, 64, 63, 44, 45, -31, -12, -57, -12, -50, 39, -27, 56, 40, 3, 58, -57, 37, -49, -4, -45.1429, -9.71429, -32, -34.2857, -28, -43, -12, -50 )
 
 [node name="FreezeArea" type="Area2D" parent="."]
 
@@ -94,3 +165,9 @@ polygon = PoolVector2Array( -29.4286, -43.7143, -30.5714, -34.8571, -44.5714, -1
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="UnfreezeArea"]
 polygon = PoolVector2Array( -12, -57.1429, -31.1429, -44.8571, -32.2857, -36.8571, -48, -11.1429, -54.2857, -6, -62.2857, 39.7143, 2, 64, 63.1429, 44.2857, 45.4286, -31.1429 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "expand"
+method_call_mode = 1
+anims/RESET = SubResource( 14 )
+anims/expand = SubResource( 13 )

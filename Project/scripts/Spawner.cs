@@ -101,7 +101,7 @@ public class Spawner : Node
 
 				GetParent().AddChild(zombleInstance);
 
-				await ToSignal(GetTree().CreateTimer(0.1f), "timeout");
+				await ToSignal(GetTree().CreateTimer(0.15f), "timeout");
 			}
 		}
 	}
@@ -109,6 +109,7 @@ public class Spawner : Node
 	public async void OnZombleDied()
 	{
 		zomblesAlive--;
+		GD.Print("Zombles alive: " + zomblesAlive);
 		if(zomblesAlive <= 0)
 		{
 			if(subWave < waveNumbers[wave].Count - 1)
