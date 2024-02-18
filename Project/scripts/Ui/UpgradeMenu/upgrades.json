@@ -1,0 +1,46 @@
+{
+    "upgrades":
+    [
+        {
+            "stats":null,
+            "type":"weapon",
+            "itemPath":"res://Nodes/weapons/MagicStaff.tscn",
+            "imagePath":"res://Sprites/weapons/magicStaff/magicStaff.png",
+            "text":"Magic Staff",
+            "subUpgrades":[
+                {
+                    "stats":null,
+                    "type":"ability",
+                    "imagePath":"res://Sprites/abilities/iceWall/IceWall.png",
+                    "text":"IceWall",
+                    "ability":{
+                        "type":"summon",
+                        "cooldown": 40,
+                        "summonPath":"res://Nodes/Summonables/StaticSummonables/IceWall.tscn",
+                        "isStatic":true
+                    },
+                    "subUpgrades":[]
+                },
+                {
+                    "stats":null,
+                    "type":"ability",
+                    "imagePath":"res://Sprites/bullets/Throwables/ToxicGrenade/ToxicGrenade.png",
+                    "text":"Toxic Grenade",
+                    "ability":{
+                        "type":"throw",
+                        "cooldown": 20,
+                        "bulletPath": "res://Nodes/bullets/throwables/ToxicGrenade.tscn"
+                    },
+                    "subUpgrades":[]
+                }]
+        },
+        {
+            "stats":null,
+            "type":"weapon",
+            "itemPath":"res://Nodes/weapons/SMG.tscn",
+            "imagePath":"res://Sprites/weapons/SMG/smgshop.png",
+            "text":"SMG",
+            "subUpgrades":[]
+        }
+    ]
+}

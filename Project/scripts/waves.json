@@ -1,0 +1,42 @@
+{
+    "waves":
+    [
+        {
+            "subWaves":
+            [
+                {
+                    "zomble": "5"
+                },
+                {
+                    "zomble": "7"
+                },
+            ]
+        },
+        {
+            "subWaves":
+            [
+                {
+                    "zomble": "3",
+                    "bomber": "1"
+                },
+                {
+                    "zomble": "10",
+                    "bomber": "1"
+                }
+            ]
+        },
+        {
+            "subWaves":
+            [
+                {
+                    "zomble": "10",
+                    "bomber": "1"
+                },
+                {
+                    "zomble": "15",
+                    "bomber": "2"
+                }
+            ]
+        }
+    ]
+}

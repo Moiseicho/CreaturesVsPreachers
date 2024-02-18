@@ -1,0 +1,152 @@
+[gd_scene load_steps=29 format=2]
+
+[ext_resource path="res://scripts/Enemies/Zomble.cs" type="Script" id=1]
+[ext_resource path="res://Sprites/zomble/bomber run/bomber_run.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/zomble/bomber run/bomber_caboom.png" type="Texture" id=3]
+
+[sub_resource type="CapsuleShape2D" id=5]
+radius = 62.0
+height = 0.0
+
+[sub_resource type="CapsuleShape2D" id=39]
+radius = 664.0
+height = 314.0
+
+[sub_resource type="CapsuleShape2D" id=7]
+radius = 130.0
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=28]
+atlas = ExtResource( 3 )
+region = Rect2( 192, 0, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=29]
+atlas = ExtResource( 3 )
+region = Rect2( 384, 0, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=30]
+atlas = ExtResource( 3 )
+region = Rect2( 576, 0, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=31]
+atlas = ExtResource( 3 )
+region = Rect2( 768, 0, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=32]
+atlas = ExtResource( 3 )
+region = Rect2( 960, 0, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=33]
+atlas = ExtResource( 3 )
+region = Rect2( 1152, 0, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 3 )
+region = Rect2( 1344, 0, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 3 )
+region = Rect2( 1536, 0, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 3 )
+region = Rect2( 1728, 0, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 3 )
+region = Rect2( 1920, 0, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=38]
+atlas = ExtResource( 3 )
+region = Rect2( 2112, 0, 192, 192 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 2 )
+region = Rect2( 64, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 2 )
+region = Rect2( 128, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 2 )
+region = Rect2( 192, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 2 )
+region = Rect2( 256, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 2 )
+region = Rect2( 320, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 2 )
+region = Rect2( 384, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 2 )
+region = Rect2( 448, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 2 )
+region = Rect2( 512, 0, 64, 64 )
+
+[sub_resource type="SpriteFrames" id=17]
+animations = [ {
+"frames": [ SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ), SubResource( 37 ), SubResource( 38 ) ],
+"loop": false,
+"name": "bite",
+"speed": 20.0
+}, {
+"frames": [ SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ) ],
+"loop": true,
+"name": "walk",
+"speed": 9.0
+} ]
+
+[node name="bomber" type="KinematicBody2D" groups=["zomble"]]
+scale = Vector2( 0.1, 0.1 )
+z_index = 5
+collision_layer = 3
+collision_mask = 3
+script = ExtResource( 1 )
+suicide = true
+biteDelay = 0.35
+maxHealth = 15.0
+minSpeed = 15000
+maxSpeed = 25000
+minDamage = 8
+maxDamage = 10
+minPlayerTargetRadius = 1000
+maxPlayerTargetRadius = 1000
+
+[node name="CollisionHull" type="CollisionShape2D" parent="."]
+position = Vector2( -1, 1 )
+shape = SubResource( 5 )
+one_way_collision_margin = 0.0
+
+[node name="BiteBox" type="Area2D" parent="." groups=["enemy"]]
+position = Vector2( 66, 21 )
+
+[node name="Area" type="CollisionShape2D" parent="BiteBox"]
+shape = SubResource( 39 )
+
+[node name="Hitbox" type="Area2D" parent="." groups=["enemy", "enemyHitbox"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource( 7 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 10, 10 )
+frames = SubResource( 17 )
+animation = "walk"
+
+[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]

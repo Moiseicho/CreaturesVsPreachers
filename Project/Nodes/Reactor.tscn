@@ -1,100 +1,120 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=22 format=2]
 
-[ext_resource path="res://elgama - Copy/silky_queen/Silky Queen.otf" type="DynamicFontData" id=1]
-[ext_resource path="res://elgama - Copy/reactor.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/silky_queen/Silky Queen.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://Sprites/reactor.png" type="Texture" id=2]
 [ext_resource path="res://scripts/Reactor.cs" type="Script" id=3]
 
-[sub_resource type="Animation" id=1]
-resource_name = "10%"
-length = 0.8
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 12, 13, 14, 15 ]
-}
+[sub_resource type="AtlasTexture" id=17]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 1024, 320, 256, 320 )
 
-[sub_resource type="Animation" id=2]
-resource_name = "100%"
-length = 1.6
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-}
+[sub_resource type="AtlasTexture" id=18]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 1280, 320, 256, 320 )
 
-[sub_resource type="Animation" id=3]
-resource_name = "50%"
-length = 0.8
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 8, 9, 10, 9 ]
-}
+[sub_resource type="AtlasTexture" id=19]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 1536, 320, 256, 320 )
 
-[sub_resource type="Animation" id=4]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0 ]
-}
+[sub_resource type="AtlasTexture" id=20]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 1792, 320, 256, 320 )
+
+[sub_resource type="AtlasTexture" id=8]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 256, 320 )
+
+[sub_resource type="AtlasTexture" id=9]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 256, 0, 256, 320 )
+
+[sub_resource type="AtlasTexture" id=10]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 512, 0, 256, 320 )
+
+[sub_resource type="AtlasTexture" id=11]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 768, 0, 256, 320 )
+
+[sub_resource type="AtlasTexture" id=12]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 1024, 0, 256, 320 )
+
+[sub_resource type="AtlasTexture" id=13]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 1280, 0, 256, 320 )
+
+[sub_resource type="AtlasTexture" id=14]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 1536, 0, 256, 320 )
+
+[sub_resource type="AtlasTexture" id=15]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 1792, 0, 256, 320 )
+
+[sub_resource type="AtlasTexture" id=21]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 320, 256, 320 )
+
+[sub_resource type="AtlasTexture" id=22]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 256, 320, 256, 320 )
+
+[sub_resource type="AtlasTexture" id=23]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 512, 320, 256, 320 )
+
+[sub_resource type="AtlasTexture" id=24]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 768, 320, 256, 320 )
+
+[sub_resource type="SpriteFrames" id=16]
+animations = [ {
+"frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ) ],
+"loop": true,
+"name": "10%",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ) ],
+"loop": true,
+"name": "100%",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
+"loop": true,
+"name": "50%",
+"speed": 5.0
+} ]
 
 [sub_resource type="DynamicFont" id=5]
 size = 37
 font_data = ExtResource( 1 )
 
-[sub_resource type="RectangleShape2D" id=6]
-extents = Vector2( 128, 96 )
-
-[sub_resource type="RectangleShape2D" id=7]
-extents = Vector2( 134.5, 114 )
-
 [node name="Reactor" type="StaticBody2D"]
 script = ExtResource( 3 )
+maxHealth = 350.0
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath("../Sprite")
-method_call_mode = 1
-anims/10% = SubResource( 1 )
-anims/100% = SubResource( 2 )
-anims/50% = SubResource( 3 )
-anims/RESET = SubResource( 4 )
-
-[node name="Sprite" type="Sprite" parent="."]
-texture = ExtResource( 2 )
-hframes = 8
-vframes = 2
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 16 )
+animation = "100%"
+frame = 4
+playing = true
 
 [node name="Label" type="Label" parent="."]
 margin_left = -64.0
@@ -104,12 +124,13 @@ margin_bottom = 89.0
 custom_fonts/font = SubResource( 5 )
 text = "100%"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, 67 )
-shape = SubResource( 6 )
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( 0, 50 )
+z_index = 2
+polygon = PoolVector2Array( -126, -77, 0, -77, 0, -111, 127, -111, 127, 107, -126, 106 )
 
 [node name="Hitbox" type="Area2D" parent="." groups=["reactorHB"]]
 
-[node name="Area" type="CollisionShape2D" parent="Hitbox"]
+[node name="Area" type="CollisionPolygon2D" parent="Hitbox"]
 position = Vector2( 0.5, 50 )
-shape = SubResource( 7 )
+polygon = PoolVector2Array( -129.5, -80, -1.5, -80, -1.5, -113, 128.5, -112, 129.5, 117, -130.5, 116 )

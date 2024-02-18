@@ -2,8 +2,9 @@ using Godot;
 using System;
 using Godot.Collections;
 
-public class weapon : Sprite
+public class Weapon : AnimatedSprite, Giveable
 {
+	
 	[Export]
 	private float damagePerBullet = 5;
 	[Export]
@@ -13,32 +14,79 @@ public class weapon : Sprite
 	[Export]
 	private float reloadTime = 1.5f;
 	[Export]
-	private float knockback = 50f;
+	private float knockback = 5000f;
+	[Export]
+	private float bulletSpeed = 1000f;
+	[Export]
+	private Vector2 bulletOffset = new Vector2(0, 0);
+	[Export]
+	private float bulletTimeOffset = 0f;
+	[Export]
+	private float fizleTime = 0.5f;
+	[Export]
+	private int pierce = 0;
+	[Export]
+	PackedScene bulletScene;
 	
-	private float ammo;
+	private int ammo;
 	private float fireTimer = 0f;
 	private float reloadTimer = 0f;
-	
-	AnimationPlayer AP;
+	private Timer bulletOffsetTimer;
+	private Texture image;
+	private bool disabled = false;
 	Zomble targetZomble;
+	private Vector2 originalOffset;
 	
+
 	public override void _Ready()
 	{
-		AP = (AnimationPlayer)GetNode("AnimationPlayer");
-		AP.CurrentAnimation = "idle";
+		checkFlip();
+		this.Animation = "idle";
 		ammo = ammoCapacity;
+		originalOffset = Offset;
+		this.Playing = true;
+
+		bulletOffsetTimer = new Timer();
+		bulletOffsetTimer.OneShot = true;
+		AddChild(bulletOffsetTimer);
+		bulletOffsetTimer.Connect("timeout", this, nameof(createBullet));
 	}
 
-	public void shoot()
+	public void createBullet()
+	{
+		Bullet bullet = (Bullet)bulletScene.Instance();
+		bullet.Position = GlobalPosition + (bulletOffset * new Vector2(1, FlipV ? -1 : 1)).Rotated(Rotation);
+		bullet.Damage = damagePerBullet;
+		bullet.KnockBack = knockback;
+		bullet.FizleTime = fizleTime;
+		bullet.Speed = bulletSpeed;
+		bullet.Pierce = pierce;
+		GetTree().Root.AddChild(bullet);
+		if(targetZomble != null)
+		{
+			bullet.LookAt(targetZomble.GetTransform().origin);
+		}else
+		{
+			bullet.Rotation = Rotation;
+		}
+	}
+
+	private void shoot()
 	{
 		if(fireTimer > 0f || reloadTimer > 0f || ammo <= 0) return;
 		
-		if(targetZomble != null)
-			targetZomble.takeDamage(damagePerBullet, getDirectionToTarget(), knockback);
-		
+		if(bulletTimeOffset == 0f)
+		{
+			createBullet();
+		}else{
+			
+			bulletOffsetTimer.WaitTime = bulletTimeOffset;
+			bulletOffsetTimer.Start();
+		}
+
 		fireTimer = 1/fireRate;
-		AP.CurrentAnimation = "shoot";
-		ammo--;
+		this.Animation = "fire";
+		if(reloadTime > 0f)ammo--;
 	}
 	
 	public void manageTimers(float delta)
@@ -46,17 +94,17 @@ public class weapon : Sprite
 		if(fireTimer > 0)
 		{
 			fireTimer -= delta;
-			if(fireTimer < 0) 
+			if(fireTimer < 0 && reloadTimer <= 0) 
 			{
 				fireTimer = 0;
-				AP.CurrentAnimation = "idle";
+				this.Animation = "idle";
 			}
 		}
 		if(ammo <= 0 && fireTimer <= 0f )
 		{
 			ammo = ammoCapacity;
 			reloadTimer = reloadTime;
-			AP.CurrentAnimation = "reload";
+			this.Animation = "reload";
 		}
 		
 		if(reloadTimer > 0)
@@ -65,7 +113,7 @@ public class weapon : Sprite
 			if(reloadTimer <= 0)
 			{
 				reloadTimer = 0;
-				AP.CurrentAnimation = "idle";
+				this.Animation = "idle";
 			}
 		}
 	}
@@ -89,32 +137,30 @@ public class weapon : Sprite
 				}
 			}
 		}
-		if(closestDistanceSquared > 75000) return null;
+		if(closestDistanceSquared > 100000) return null;
 		return closestZomble;
 	}
 	
 	private void checkFlip()
 	{
-		if (RotationDegrees % 360 > 90 && RotationDegrees % 360 < 270)
+		float fixedDegrees = (360+(RotationDegrees % 360))%360;
+		if (fixedDegrees > 90 && fixedDegrees < 270 && !FlipV)
 		{
 			FlipV = true;
-		}else
+			Offset = new Vector2(originalOffset.x, originalOffset.y*-1);
+			
+		}else if((fixedDegrees <= 90 || fixedDegrees >= 270) && FlipV)
 		{
 			FlipV = false;
+			Offset = originalOffset;
 		}
-	}
-	
-	private Vector2 getDirectionToTarget()
-	{
-		return(targetZomble.GlobalTransform.origin - GlobalTransform.origin).Normalized();
 	}
 
 	public void gunlock()
 	{
 		if(targetZomble != null && reloadTimer <= 0f)
 		{
-			Vector2 directionToZomble = getDirectionToTarget();
-			LookAt(GlobalTransform.origin + directionToZomble);
+			LookAt(targetZomble.GetTransform().origin);
 		}else
 		{
 			Player player = (Player)GetParent();
@@ -131,9 +177,61 @@ public class weapon : Sprite
 	
 	public override void _Process(float delta)
 	{
+		if(disabled) return;
 		manageTimers(delta);
-		if(Input.IsActionPressed("ui_shoot"))shoot();
 		targetZomble = checkZomble();
 		gunlock();
+		if(Input.IsActionPressed("ui_shoot"))
+		{
+			shoot();
+		}else if(Input.IsActionPressed("ui_reload"))
+		{
+			manualReload();
+		}
+	}
+
+	public void disable()
+	{
+		disabled = true;
+		Visible = false;
+	}
+
+	public void enable()
+	{
+		disabled = false;
+		Visible = true;
+		fireTimer = 0.5f;
+
+	}
+
+	public void manualReload()
+	{
+		if(ammo >= ammoCapacity || reloadTimer > 0f || reloadTime == 0) return;
+		ammo = ammoCapacity;
+		reloadTimer = reloadTime;
+		this.Animation = "reload";
+	}
+
+	public void setImage(Texture image)
+	{
+		this.image = image;
+	}
+
+	public Texture getImage()
+	{
+		return image;
+	}
+
+	public int getAmmo()
+	{
+		if(reloadTime == 0)
+		{
+			return -1;
+		}
+		return (int)ammo;
+	}
+	public int getAmmoCapacity()
+	{
+		return ammoCapacity;
 	}
 }
