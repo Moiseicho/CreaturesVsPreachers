@@ -7,7 +7,6 @@ public class StaticSummon : StaticBody2D, Summonable
 	private Vector2 position;
 	[Export]
 	private bool playerRelative = false;
-	private Player player;
 	[Export]
 	private float entryTime = 0;
 	[Export]
@@ -16,9 +15,11 @@ public class StaticSummon : StaticBody2D, Summonable
 	private float fadeTime = 0;
 	[Export]
 	private float freezeTime = 0;
-	private AnimatedSprite animatedSprite;
 	[Export]
 	private bool freezeEnabled = true;
+
+	private Player player;
+	private AnimatedSprite animatedSprite;
 	private Area2D freezeArea;
 	private Area2D unfreezeArea;
 	private CollisionPolygon2D collisionPolygon2D;
@@ -33,11 +34,13 @@ public class StaticSummon : StaticBody2D, Summonable
 		if(freezeEnabled)
 		{
 			freezeArea = (Area2D)GetNode("FreezeArea");
-			collisionPolygon2D = (CollisionPolygon2D)GetNode("CollisionPolygon2D");
 			unfreezeArea = (Area2D)GetNode("UnfreezeArea");
 
-			collisionPolygon2D.Disabled = true;
 		}
+
+		collisionPolygon2D = (CollisionPolygon2D)GetNode("CollisionPolygon2D");
+		collisionPolygon2D.Disabled = true;
+		
 		Timer effectTimer = new Timer();
 		effectTimer.WaitTime = effectTime;
 		effectTimer.OneShot = true;
@@ -73,8 +76,8 @@ public class StaticSummon : StaticBody2D, Summonable
 					zomble.freeze();
 				}
 			}
-			collisionPolygon2D.Disabled = false;
 		}
+		collisionPolygon2D.Disabled = false;
 	}
 
 	private void Default()
@@ -102,7 +105,8 @@ public class StaticSummon : StaticBody2D, Summonable
 	private void removeEffect()
 	{
 		if(freezeEnabled)
-		{foreach(Node2D node in unfreezeArea.GetOverlappingBodies())
+		{
+			foreach(Node2D node in unfreezeArea.GetOverlappingBodies())
 			{
 				if (node is Zomble)
 				{
@@ -125,10 +129,4 @@ public class StaticSummon : StaticBody2D, Summonable
 			player.GetTree().Root.AddChild(this);
 		}
 	}
-
-	public override void _ExitTree()
-	{
-		QueueFree();
-	}
-
 }

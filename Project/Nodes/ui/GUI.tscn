@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Nodes/ui/Fader.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/Ui/GUI.cs" type="Script" id=2]
@@ -40,6 +40,37 @@ size = 40
 outline_size = 4
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 6 )
+
+[sub_resource type="Animation" id=6]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "appear"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 0.482968, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1, 1 ) ]
+}
 
 [node name="GUI" type="CanvasLayer"]
 pause_mode = 2
@@ -176,15 +207,19 @@ margin_bottom = 150.0
 rect_min_size = Vector2( 600, 0 )
 rect_pivot_offset = Vector2( -824, -41 )
 
-[node name="TextureRect" type="TextureRect" parent="HUD"]
-margin_left = 1055.0
-margin_top = 490.0
-margin_right = 1257.0
-margin_bottom = 698.0
+[node name="AmmoCounter" type="TextureRect" parent="HUD"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -197.0
+margin_top = -195.0
+margin_right = 5.0
+margin_bottom = 13.0
 texture = ExtResource( 13 )
 expand = true
 
-[node name="Label" type="Label" parent="HUD/TextureRect"]
+[node name="Label" type="Label" parent="HUD/AmmoCounter"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -255,6 +290,7 @@ custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.333333, 0.333333, 0.333333, 1 )
 custom_colors/font_color_pressed = Color( 1, 0.384314, 0.384314, 1 )
 custom_fonts/font = SubResource( 4 )
+disabled = true
 text = "OPTIONS"
 flat = true
 icon_align = 1
@@ -299,6 +335,8 @@ margin_right = 480.0
 margin_bottom = 480.0
 grow_horizontal = 2
 grow_vertical = 2
+rect_scale = Vector2( 1e-05, 1e-05 )
+rect_pivot_offset = Vector2( 480, 480 )
 texture = ExtResource( 9 )
 expand = true
 script = ExtResource( 10 )
@@ -323,6 +361,11 @@ margin_top = 400.0
 margin_right = 854.0
 margin_bottom = 570.0
 mouse_default_cursor_shape = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UpgradeMenu"]
+method_call_mode = 1
+anims/RESET = SubResource( 6 )
+anims/appear = SubResource( 7 )
 
 [connection signal="pressed" from="PauseMenu/TextureRect/VBoxContainer/Resume" to="." method="_on_Resume_pressed"]
 [connection signal="pressed" from="PauseMenu/TextureRect/VBoxContainer/Menu" to="." method="_on_Menu_pressed"]

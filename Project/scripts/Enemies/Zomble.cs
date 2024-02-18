@@ -4,11 +4,13 @@ using System;
 
 public class Zomble : KinematicBody2D
 {
-	private bool died = false;
+	
 	[Export]
 	private bool suicide = false;
 	[Export]
 	private float biteDelay = 0.4f;
+	[Export]
+	private float maxHealth = 20;
 	[Export]
 	private int minSpeed = 0;
 	[Export]
@@ -17,33 +19,32 @@ public class Zomble : KinematicBody2D
 	private int minDamage = 0;
 	[Export]
 	private int maxDamage = 0;
-	private float tempSpeed = 0f;
-	private float speed = 0f;
 	[Export]
 	private int minPlayerTargetRadius;
 	[Export]
 	private int maxPlayerTargetRadius;
+
+	private float tempSpeed = 0f;
+	private float speed = 0f;
 	private float playerTargetRadius;
-	private Player player;
 	private float damage;
 	private float health;
-	[Export]
-	private float maxHealth = 20;
-	
-	private AnimatedSprite animatedSprite;
-	private Timer timer;
-	private bool biting = false;
-	private Area2D biteBox;
-	private bool right = true;
-	private Reactor reactor;
-	private bool stuck = false;
 	private Timer slowDownTimer;
+	private Timer biteTimer;
+	private bool biting = false;
+	private bool right = true;
+	private bool stuck = false;
 	private bool frozen = false;
+	private bool died = false;
+	private AnimatedSprite animatedSprite;
+	private Area2D biteBox;
+	private Reactor reactor;
+	private Player player;
 
 	[Signal]
 	public delegate void _ZombleDied();
 
-	private const float MinSpeedCoef = 0.2f;
+	private static float MinSpeedCoef = 0.2f;
 
 	public override void _Ready()
 	{
@@ -51,12 +52,17 @@ public class Zomble : KinematicBody2D
 		biteBox = (Area2D)GetNode("BiteBox");
 		animatedSprite = (AnimatedSprite)GetNode("AnimatedSprite");
 		reactor = (Reactor)GetNode("../Reactor");
-		animatedSprite.Animation = "walk";
-		timer = new Timer();
-		AddChild(timer);
-		health = maxHealth;
+		
+		biteTimer = new Timer();
+		AddChild(biteTimer);
+		biteTimer.Connect("timeout", this, nameof(OnBiteHit));
+		slowDownTimer = new Timer();
+		AddChild(slowDownTimer);
+		slowDownTimer.Connect("timeout", this, nameof(unstuck));
 
+		animatedSprite.Animation = "walk";
 		animatedSprite.Play();
+		health = maxHealth;
 
 		Random random = new Random();
 
@@ -71,12 +77,7 @@ public class Zomble : KinematicBody2D
 		}
 		damage = random.Next(minDamage, maxDamage);
 
-		timer.Connect("timeout", this, nameof(OnBiteHit));
-
-		slowDownTimer = new Timer();
-		AddChild(slowDownTimer);
-		slowDownTimer.Connect("timeout", this, nameof(unstuck));
-
+		
 	}
 
 	public void manageLife()
@@ -89,6 +90,7 @@ public class Zomble : KinematicBody2D
 
 	public void die()
 	{
+		if(died) return;
 		died = true;
 		if(suicide)
 		{
@@ -100,6 +102,28 @@ public class Zomble : KinematicBody2D
 		
 		EmitSignal(nameof(_ZombleDied));
 		QueueFree();
+	}
+
+	private void manageFlip(Vector2 direction)
+	{
+		if(direction.x < 0)
+		{
+			if(right)
+			{
+				biteBox.Position *= new Vector2(-1, 1);
+				right = false;
+			}
+			animatedSprite.FlipH = true;
+			
+		}else
+		{
+			if(!right)
+			{
+				biteBox.Position *= new Vector2(-1, 1);
+				right = true;
+			}
+			animatedSprite.FlipH = false;
+		}
 	}
 
 	public override void _Process(float delta)
@@ -119,24 +143,9 @@ public class Zomble : KinematicBody2D
 			playerT = false;
 		}
 		Vector2 movement = direction.Normalized() * tempSpeed * delta;
-		if(direction.x < 0)
-		{
-			if(right)
-			{
-				biteBox.Position *= new Vector2(-1, 1);
-				right = false;
-			}
-			animatedSprite.FlipH = true;
-			
-		}else
-		{
-			if(!right)
-			{
-				biteBox.Position *= new Vector2(-1, 1);
-				right = true;
-			}
-			animatedSprite.FlipH = false;
-		}
+		
+		manageFlip(direction);
+
 		if(!playerT)
 		{
 			foreach (Area2D area in biteBox.GetOverlappingAreas())
@@ -175,23 +184,24 @@ public class Zomble : KinematicBody2D
 
 	public void StartWait(float duration)
 	{
-		timer.WaitTime = duration;
-		timer.OneShot = true;
-		timer.Start();
+		biteTimer.WaitTime = duration;
+		biteTimer.OneShot = true;
+		biteTimer.Start();
 	}
 
 	private void OnBiteHit()
 	{
 		foreach (Area2D area in biteBox.GetOverlappingAreas())
 		{
-			if (area.IsInGroup("playerHB"))
+			if (area.IsInGroup("playerHB") && maxPlayerTargetRadius > 0)
 			{
 				player.takeDamage(damage);
 				return;
 			}
-			if (area.IsInGroup("reactorHB"))
+			if (area.IsInGroup("reactorHB") && minPlayerTargetRadius < 1000)
 			{
 				reactor.takeDamage(damage);
+				return;
 			}
 		}
 	}
@@ -204,7 +214,6 @@ public class Zomble : KinematicBody2D
 	public void takeDamage(float damage, float knockback)
 	{
 		if(frozen) return;
-		GD.Print("From Zomble number " + GetInstanceId());
 		health -= damage;
 		if(!stuck)
 		{
@@ -214,7 +223,6 @@ public class Zomble : KinematicBody2D
 				tempSpeed = speed * MinSpeedCoef;
 			}
 		}
-		GD.Print("took damage " + damage);
 	}
 
 	public void slowDown(float slowDown, float duration)

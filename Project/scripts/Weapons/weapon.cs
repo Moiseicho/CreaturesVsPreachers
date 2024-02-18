@@ -23,20 +23,18 @@ public class Weapon : AnimatedSprite, Giveable
 	private float bulletTimeOffset = 0f;
 	[Export]
 	private float fizleTime = 0.5f;
+	[Export]
 	private int pierce = 0;
+	[Export]
+	PackedScene bulletScene;
 	
 	private int ammo;
 	private float fireTimer = 0f;
 	private float reloadTimer = 0f;
+	private Timer bulletOffsetTimer;
 	private Texture image;
-	
 	private bool disabled = false;
-	
 	Zomble targetZomble;
-
-	[Export]
-	PackedScene bulletScene;
-
 	private Vector2 originalOffset;
 	
 
@@ -47,12 +45,17 @@ public class Weapon : AnimatedSprite, Giveable
 		ammo = ammoCapacity;
 		originalOffset = Offset;
 		this.Playing = true;
+
+		bulletOffsetTimer = new Timer();
+		bulletOffsetTimer.OneShot = true;
+		AddChild(bulletOffsetTimer);
+		bulletOffsetTimer.Connect("timeout", this, nameof(createBullet));
 	}
 
 	public void createBullet()
 	{
 		Bullet bullet = (Bullet)bulletScene.Instance();
-		bullet.Position = GlobalPosition + (bulletOffset * new Vector2(1, FlipV ? -1 : 1)).Rotated(Rotation) ;
+		bullet.Position = GlobalPosition + (bulletOffset * new Vector2(1, FlipV ? -1 : 1)).Rotated(Rotation);
 		bullet.Damage = damagePerBullet;
 		bullet.KnockBack = knockback;
 		bullet.FizleTime = fizleTime;
@@ -76,12 +79,9 @@ public class Weapon : AnimatedSprite, Giveable
 		{
 			createBullet();
 		}else{
-			Timer timer = new Timer();
-			timer.OneShot = true;
-			timer.WaitTime = bulletTimeOffset;
-			AddChild(timer);
-			timer.Connect("timeout", this, nameof(createBullet));
-			timer.Start();
+			
+			bulletOffsetTimer.WaitTime = bulletTimeOffset;
+			bulletOffsetTimer.Start();
 		}
 
 		fireTimer = 1/fireRate;
@@ -144,12 +144,12 @@ public class Weapon : AnimatedSprite, Giveable
 	private void checkFlip()
 	{
 		float fixedDegrees = (360+(RotationDegrees % 360))%360;
-		if ((360+(fixedDegrees % 360))%360 > 90 && fixedDegrees % 360 < 270 && !FlipV)
+		if (fixedDegrees > 90 && fixedDegrees < 270 && !FlipV)
 		{
 			FlipV = true;
 			Offset = new Vector2(originalOffset.x, originalOffset.y*-1);
 			
-		}else if((fixedDegrees % 360 <= 90 || fixedDegrees % 360 >= 270) && FlipV)
+		}else if((fixedDegrees <= 90 || fixedDegrees >= 270) && FlipV)
 		{
 			FlipV = false;
 			Offset = originalOffset;

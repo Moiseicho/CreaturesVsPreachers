@@ -28,7 +28,7 @@
                     "text":"Toxic Grenade",
                     "ability":{
                         "type":"throw",
-                        "cooldown": 10,
+                        "cooldown": 20,
                         "bulletPath": "res://Nodes/bullets/throwables/ToxicGrenade.tscn"
                     },
                     "subUpgrades":[]

@@ -8,11 +8,9 @@ public class Bullet : KinematicBody2D
 	protected float damage = 5;
 	protected float knockBack = 5;
 	protected int pierce = 0;
-	
 	protected AnimatedSprite sprite;
 	protected Area2D collision;
-	[Export]
-	protected EffectOnHit effectOnHit;
+
 	[Export]
 	protected PackedScene effectOnFizleScene;
 
@@ -68,10 +66,10 @@ public class Bullet : KinematicBody2D
 	private void checkFlip()
 	{
 		float fixedDegrees = (360+(RotationDegrees % 360))%360;
-		if ((360+(fixedDegrees % 360))%360 > 90 && fixedDegrees % 360 < 270 && !sprite.FlipV)
+		if (fixedDegrees > 90 && fixedDegrees < 270 && !sprite.FlipV)
 		{
 			sprite.FlipV = true;
-		}else if((fixedDegrees % 360 <= 90 || fixedDegrees % 360 >= 270) && sprite.FlipV)
+		}else if((fixedDegrees <= 90 || fixedDegrees >= 270) && sprite.FlipV)
 		{
 			sprite.FlipV = false;
 		}

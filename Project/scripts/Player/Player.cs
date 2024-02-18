@@ -5,45 +5,37 @@ public class Player : KinematicBody2D
 {
 	[Export]
 	private float speed;
-	private float defaultSpeed;
-	private bool right = true;
-	private bool dead = false;
+	[Export]
+	private float maxHp = 30;
 
+	private float hp;
+	private bool abilityEquiped = false;
+	private Throwable throwable = null;
 	private Ability ability1 = null;
 	private float ability1Cooldown;
 	private float ability1Timer = 0f;
 	private Ability ability2 = null;
 	private float ability2Cooldown;
 	private float ability2Timer = 0f;
-	
-	AnimationPlayer ap;
-	Sprite sp;
+	private float defaultSpeed;
+	private bool right = true;
+	private bool dead = false;
+	AnimatedSprite sprite;
 	CollisionShape2D collisionHull;
 	Area2D hitbox;
-
-
-	[Export]
-	private float maxHp = 100;
-	private float hp;
-	private bool abilityEquiped = false;
-	private Throwable throwable = null;
-
 	Weapon weapon;
 	
 	[Signal]
 	public delegate void _PlayerDied();
-
 	[Signal]
 	public delegate void _NewAbility();
 
 	public override void _Ready()
 	{
-
 		defaultSpeed = speed;
 		hp = maxHp;
 
-		ap = (AnimationPlayer)GetNode("AnimationPlayer");
-		sp = (Sprite)GetNode("Sprite");
+		sprite = (AnimatedSprite)GetNode("AnimatedSprite");
 		collisionHull = (CollisionShape2D)GetNode("CollisionHull");
 		hitbox = (Area2D)GetNode("Hitbox");
 		foreach (Node child in GetChildren())
@@ -52,51 +44,44 @@ public class Player : KinematicBody2D
 			{
 				weapon = (Weapon)child;
 			}
-		}
-		
+		}	
 	}
 
 	private void setAnimation(string animation)
 	{
-		ap.CurrentAnimation = animation;
+		sprite.Animation = animation;
 	}
+
+	private void manageFlip(bool isRight)
+	{
+		if(right != isRight)
+		{
+			hitbox.Scale *= (new Vector2(-1, 1));
+			collisionHull.Position *= (new Vector2(-1, 1));
+			sprite.FlipH = !sprite.FlipH;
+			if(abilityEquiped)
+			{
+				throwable.Position *= (new Vector2(-1, 1));
+			}
+		}
+	}
+
 	public override void _PhysicsProcess(float delta)
 	{	
-		if(dead)
-		{
-			return;
-		}
+		if(dead)return;
+
 		bool moving = false;
-		right = !sp.FlipH;
+		right = !sprite.FlipH;
 		Vector2 movement = new Vector2(0, 0);
 
 		if(Input.IsActionPressed("ui_left"))
 		{
-			if(right)
-			{
-				hitbox.Scale *= (new Vector2(-1, 1));
-				collisionHull.Position *= (new Vector2(-1, 1));
-				sp.FlipH = true;
-				if(abilityEquiped)
-				{
-					throwable.Position *= (new Vector2(-1, 1));
-				}
-			}
+			manageFlip(false);
 			movement += new Vector2(-delta, 0);
 			moving = true;
-		}
-		if(Input.IsActionPressed("ui_right"))
+		}else if(Input.IsActionPressed("ui_right"))
 		{
-			if(!right)
-			{
-				hitbox.Scale *= (new Vector2(-1, 1));
-				collisionHull.Position *= (new Vector2(-1, 1));
-				sp.FlipH = false;
-				if(abilityEquiped)
-				{
-					throwable.Position *= (new Vector2(-1, 1));
-				}
-			}
+			manageFlip(true);
 			movement += new Vector2(delta, 0);
 			moving = true;
 		}
@@ -104,23 +89,24 @@ public class Player : KinematicBody2D
 		{
 			movement += new Vector2(0, -delta);
 			moving = true;
-		}
-		if(Input.IsActionPressed("ui_down"))
+		}else if(Input.IsActionPressed("ui_down"))
 		{
 			movement += new Vector2(0, delta);
 			moving = true;
 		}
-		if(Input.IsActionPressed("ui_ability1") && ability1 != null && !abilityEquiped && ability1Timer <= 0f)
+		if(Input.IsActionPressed("ui_ability1") && ability1 != null &&
+			!abilityEquiped && 
+			ability1Timer <= 0f)
 		{
 			ability1.Effect();
 			ability1Timer = ability1Cooldown;
-		}
-		if(Input.IsActionPressed("ui_ability2") && ability2 != null && !abilityEquiped && ability2Timer <= 0f)
+		}else if(Input.IsActionPressed("ui_ability2") && 
+			ability2 != null && !abilityEquiped && 
+			ability2Timer <= 0f)
 		{
 			ability2.Effect();
 			ability2Timer = ability2Cooldown;
-		}
-		if(Input.IsActionPressed("ui_shoot") && abilityEquiped)
+		}else if(Input.IsActionPressed("ui_shoot") && abilityEquiped)
 		{
 			throwable.Position = Position + new Vector2(20, 0) * (right ? 1 : -1);
 			RemoveChild(throwable);
@@ -129,8 +115,6 @@ public class Player : KinematicBody2D
 			weapon.enable();
 			abilityEquiped = false;
 		}
-
-
 
 		manageAnimation(moving);
 		manageTimers(delta);
@@ -173,8 +157,6 @@ public class Player : KinematicBody2D
 		{
 			EmitSignal(nameof(_PlayerDied));
 			dead = true;
-			GD.Print("died polayer");
-			//animation to dead
 		}
 	}
 

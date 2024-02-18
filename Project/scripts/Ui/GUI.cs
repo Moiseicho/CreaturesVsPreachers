@@ -27,7 +27,7 @@ public class GUI : Menu
 		abilityEImage = (TextureRect)GetNode("HUD/Rows/Bottom row/Esquare/Texture");
 		abilityQCooldown = (TextureProgress)GetNode("HUD/Rows/Bottom row/Qsquare/Cooldown");
 		abilityECooldown = (TextureProgress)GetNode("HUD/Rows/Bottom row/Esquare/Cooldown");
-		ammoCounter = (Label)GetNode("HUD/TextureRect/Label");
+		ammoCounter = (Label)GetNode("HUD/AmmoCounter/Label");
 
 		upgradeMenu.Connect(nameof(UpgradeMenu.UpgradeMenuClose), this, nameof(closeUpgradeMenu));
 
@@ -62,7 +62,6 @@ public class GUI : Menu
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
-		//if the event is the "ui_escape" event depending on menuOpen either open or close the menu
 		if (@event.IsActionPressed("ui_escape"))
 		{
 			if (menuOpen)
@@ -81,7 +80,6 @@ public class GUI : Menu
 		GetTree().Paused = true;
 		menu.Visible = true;
 		menuOpen = true;
-		
 	}
 	
 	private void _on_Resume_pressed()

@@ -93,4 +93,5 @@ shape = SubResource( 5 )
 scale = Vector2( 0.2, 0.2 )
 frames = SubResource( 18 )
 animation = "throw"
+frame = 1
 playing = true

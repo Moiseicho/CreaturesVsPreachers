@@ -3,7 +3,7 @@ using Godot;
 public class SummonAbility : Ability
 {
 	private PackedScene summonableScene;
-	private bool isStatic = false;
+	private bool isStatic = true;
 
 	public SummonAbility(PackedScene summonableScene, bool isStatic)
 	{
@@ -25,17 +25,9 @@ public class SummonAbility : Ability
 	{
 		if(isStatic)
 		{
-			GD.Print("Summoning Static: " + summonableScene.ResourceName);
 			StaticSummon summonable = (StaticSummon)summonableScene.Instance();
 			summonable.setPlayer(player);
 			summonable.Summon();
 		}
-		else
-		{
-			//KinematicSummon in the future
-		}
 	}
-
-	
-
 }

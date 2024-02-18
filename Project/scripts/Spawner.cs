@@ -6,23 +6,18 @@ using IO = System.IO;
 
 public class Spawner : Node
 {
-	private List<List<Dictionary<string, int>>> waveNumbers;
-
 	[Export]
 	private List<Vector2> spawnPoints;
-
+	
+	private List<List<Dictionary<string, int>>> waveNumbers;
+	
 	private const string folderPath = "res://Nodes/zombles";
-
 	private int zomblesAlive = 0;
-
 	private int subWave = 0;
 	private int wave = 0;
-
+	private int timeLeft = 5;
 	private Timer timer;
 	private Label label;
-
-	private int timeLeft = 5;
-
 	private GUI gui;
 
 	private void yippie()
@@ -34,22 +29,17 @@ public class Spawner : Node
 	{
 		gui = GetNode<GUI>("../GUI");
 		timer = GetNode<Timer>("Timer");
+		timer.Connect("timeout", this, nameof(onSecondPassed));
 		label = GetNode<Label>("Label");
-
 		label.Text = timeLeft.ToString();
-
-		
 
 		waveNumbers = new List<List<Dictionary<string, int>>>();
 		Godot.File f = new Godot.File();
-
 		f.Open("res://scripts/waves.json", Godot.File.ModeFlags.Read);
-
 		string contents = f.GetAsText();
 		f.Close();
-
+		
 		Godot.Collections.Dictionary jsonFile = JSON.Parse(contents).Result as Godot.Collections.Dictionary;
-
 		Godot.Collections.Array waves = jsonFile["waves"] as Godot.Collections.Array;
 		
 		foreach (Godot.Collections.Dictionary wave in waves)
@@ -61,32 +51,29 @@ public class Spawner : Node
 				Dictionary<string, int> zombleNumbers = new Dictionary<string, int>();
 				foreach (string zomble in subWave.Keys)
 				{
-					//convert from string to int
 					zombleNumbers[zomble] = Convert.ToInt32(subWave[zomble]);
 				}
 				subWaveList.Add(zombleNumbers);
 			}
 			waveNumbers.Add(subWaveList);
 		}
-		
-		timer.Connect("timeout", this, nameof(onSecondPassed));
+
 		timer.Start();
 	}
 
-	public void onSecondPassed()
-	{
+	public void onSecondPassed(){
 		timeLeft--;
 		label.Text = timeLeft.ToString();
 		if(timeLeft <= 0)
 		{
 			timer.Stop();
 			label.Text = "DANGER!";
-			spawn(wave, subWave);
+			spawn();
 			timeLeft = 15;
 		}
 	}
 
-	public async void spawn(int wave, int subWave)
+	public async void spawn()
 	{
 		Dictionary<string, int> zombleNumber = waveNumbers[wave][subWave];
 		foreach (string zomble in zombleNumber.Keys)
@@ -109,14 +96,13 @@ public class Spawner : Node
 	public async void OnZombleDied()
 	{
 		zomblesAlive--;
-		GD.Print("Zombles alive: " + zomblesAlive);
 		if(zomblesAlive <= 0)
 		{
 			if(subWave < waveNumbers[wave].Count - 1)
 			{
 				subWave++;
-				await ToSignal(GetTree().CreateTimer(5f), "timeout");
-				spawn(wave, subWave);
+				await ToSignal(GetTree().CreateTimer(2f), "timeout");
+				spawn();
 			}
 			else
 			{
@@ -125,16 +111,14 @@ public class Spawner : Node
 				
 				if(wave >= waveNumbers.Count)
 				{
-					label.Text = "You won!";
 					gui.victory();
 					return;
 				}
+				
 				gui.openUpgradeMenu();
 				timer.Start();
 				label.Text = timeLeft.ToString();
 			}
 		}
 	}
-
-
 }

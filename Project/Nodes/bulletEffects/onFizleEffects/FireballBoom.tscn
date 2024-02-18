@@ -54,9 +54,10 @@ animations = [ {
 } ]
 
 [node name="FireballBoom" type="Area2D" groups=["ground"]]
-z_index = 1
+z_index = 2
 script = ExtResource( 1 )
-slow = 0.5
+Damage = 3.0
+slow = 1.0
 effectTime = 0.5
 tickTime = 0.2
 entryTime = 0.5
@@ -70,7 +71,7 @@ shape = SubResource( 25 )
 scale = Vector2( 1.2, 1.2 )
 frames = SubResource( 5 )
 animation = "activation"
-frame = 1
+frame = 5
 playing = true
 
 [connection signal="body_entered" from="." to="." method="_on_AcidSplash_body_entered"]

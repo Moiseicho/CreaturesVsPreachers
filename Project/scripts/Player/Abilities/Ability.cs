@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Ability : Node, Giveable
+public abstract class Ability : Node, Giveable
 {
 	protected float cooldown = 0f;
 	protected Player player;
@@ -24,7 +24,7 @@ public class Ability : Node, Giveable
 		set { image = value; }
 	}
 
-	public virtual void Effect(){}
+	public abstract void Effect();
 
 	public void setImage(Texture image)
 	{

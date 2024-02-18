@@ -7,6 +7,7 @@ public class Throwable : Bullet
 	private float maxSpeed;
 	[Export]
 	private float airSlowdown;
+
 	[Export]
 	public float Speed {get{return speed;}set{speed = value;}}
 	[Export]
@@ -41,8 +42,6 @@ public class Throwable : Bullet
 
 	protected override void _on_Bullet_area_entered(Area2D area)
 	{
-
-		//Make something to check if the throwable is outside the stage walls, since their hitboxes don't trigger this function 
 		if(hold)return;
 		base._on_Bullet_area_entered(area);
 		if(area.IsInGroup("reactorHB"))

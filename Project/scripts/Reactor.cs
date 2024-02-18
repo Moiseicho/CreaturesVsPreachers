@@ -3,13 +3,12 @@ using System;
 
 public class Reactor : StaticBody2D
 {
-	
-	private float health;
-
 	[Export]
 	private float maxHealth = 150;
+	
+	private float health;
 	private Label label;
-	private AnimationPlayer animationPlayer;
+	private AnimatedSprite animatedSprite;
 
 	[Signal]
 	public delegate void _ReactorDestroyed();
@@ -18,11 +17,10 @@ public class Reactor : StaticBody2D
 	{
 		health = maxHealth;
 		label = (Label)GetNode("Label");
-		animationPlayer = (AnimationPlayer)GetNode("AnimationPlayer");
-		animationPlayer.CurrentAnimation = "100%";
+		animatedSprite = (AnimatedSprite)GetNode("AnimatedSprite");
+		animatedSprite.Animation = "100%";
 	}
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(float delta)
 	{
 		int healthPercent = (int)Math.Round(100*health/maxHealth);
@@ -30,13 +28,13 @@ public class Reactor : StaticBody2D
 		
 		if(healthPercent > 50)
 		{
-			animationPlayer.CurrentAnimation = "100%";
+			animatedSprite.Animation = "100%";
 		}else if(healthPercent > 10)
 		{
-			animationPlayer.CurrentAnimation = "50%";
+			animatedSprite.Animation = "50%";
 		}else
 		{
-			animationPlayer.CurrentAnimation = "10%";
+			animatedSprite.Animation = "10%";
 		}
 	}
 

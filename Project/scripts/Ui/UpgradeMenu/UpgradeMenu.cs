@@ -6,8 +6,9 @@ public class UpgradeMenu : TextureRect
 {
 	private UpgradeOption[] upgradeOptions;
 	private TreeNode<UpgradeOption> upgradeTree;
-
+	private AnimationPlayer animationPlayer;
 	private Player player;
+	
 	[Signal]
 	public delegate void UpgradeMenuClose();
 
@@ -17,14 +18,20 @@ public class UpgradeMenu : TextureRect
 		upgradeOptions[0] = GetNode<UpgradeOption>("UpgradeOptionButton1");
 		upgradeOptions[1] = GetNode<UpgradeOption>("UpgradeOptionButton2");
 		upgradeOptions[2] = GetNode<UpgradeOption>("UpgradeOptionButton3");
-
-		upgradeOptions[0].TextureNormal = ResourceLoader.Load("res://Sprites/Missing.png") as Texture;
 	
 		for(int i = 0; i < upgradeOptions.Length; i++)
 		{
 			upgradeOptions[i].Connect("UpgradeOptionPressed", this, nameof(UpgradeOptionPressed), new Godot.Collections.Array() { i });
 		}
 
+		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+
+		loadFile();	
+		
+	}
+
+	public void loadFile()
+	{
 		Godot.File f = new Godot.File();
 
 		f.Open("res://scripts/Ui/UpgradeMenu/upgrades.json", Godot.File.ModeFlags.Read);
@@ -37,7 +44,10 @@ public class UpgradeMenu : TextureRect
 		Godot.Collections.Array upgrades = jsonFile["upgrades"] as Godot.Collections.Array;
 		
 		upgradeTree = new TreeNode<UpgradeOption>(null);
-		Stack<Tuple<TreeNode<UpgradeOption>, Godot.Collections.Dictionary>> stack = new Stack<Tuple<TreeNode<UpgradeOption>, Godot.Collections.Dictionary>>();
+
+		Stack<Tuple<TreeNode<UpgradeOption>, Godot.Collections.Dictionary>> stack =
+		new Stack<Tuple<TreeNode<UpgradeOption>, Godot.Collections.Dictionary>>();
+
 		foreach(Godot.Collections.Dictionary upgrade in upgrades)
 		{
 			stack.Push(new Tuple<TreeNode<UpgradeOption>, Godot.Collections.Dictionary>(upgradeTree, upgrade));
@@ -79,7 +89,9 @@ public class UpgradeMenu : TextureRect
 					giveUpgrade.setImage(ResourceLoader.Load(upgrade["imagePath"] as string) as Texture);
 				}else if(ability["type"] as string == "summon")
 				{
-					SummonAbility tempSummon = new SummonAbility(ResourceLoader.Load(ability["summonPath"] as string) as PackedScene, (bool)ability["isStatic"]);
+					SummonAbility tempSummon = new SummonAbility(ResourceLoader.Load(
+						ability["summonPath"] as string) as PackedScene,
+						(bool)ability["isStatic"]);
 					tempSummon.Cooldown = (float)ability["cooldown"];
 					giveUpgrade = new GiveUpgrade(tempSummon);
 					giveUpgrade.setImage(ResourceLoader.Load(upgrade["imagePath"] as string) as Texture);
@@ -89,17 +101,16 @@ public class UpgradeMenu : TextureRect
 			UpgradeOption temp = new UpgradeOption(texture, statsUpgrade, giveUpgrade);
 			TreeNode<UpgradeOption> thisNode = new TreeNode<UpgradeOption>(temp);
 			parent.addChild(thisNode);
-			GD.Print("uploaded: " + temp.TextureNormal.ToString());
 			foreach(Godot.Collections.Dictionary subUpgrade in subUpgrades)
 			{
 				stack.Push(new Tuple<TreeNode<UpgradeOption>, Godot.Collections.Dictionary>(thisNode, subUpgrade));
 			}
 		}
-		
 	}
 
 	public void Appear(Player player)
 	{
+		animationPlayer.CurrentAnimation = "appear";
 		this.player = player;
 		bool hasUpgrades = false;
 
@@ -110,13 +121,10 @@ public class UpgradeMenu : TextureRect
 				hasUpgrades = true;
 				upgradeOptions[i].clone(upgradeTree.getChildrenData()[i]);
 				upgradeOptions[i].Disabled = false;
-
-			}
-			else
+			}else
 			{
 				upgradeOptions[i].Disabled = true;
 			}
-			
 			upgradeOptions[i].setPlayer(player);
 			upgradeOptions[i].Visible = true;
 		}
@@ -125,7 +133,7 @@ public class UpgradeMenu : TextureRect
 			EmitSignal(nameof(UpgradeMenuClose));
 			return;
 		}
-		
+		animationPlayer.Play();
 		this.Visible = true;
 	}
 
@@ -138,6 +146,7 @@ public class UpgradeMenu : TextureRect
 		}
 		upgradeTree = upgradeTree.getChildren()[index];
 		EmitSignal(nameof(UpgradeMenuClose));
+		animationPlayer.CurrentAnimation = "RESET";
 	}
 
 }

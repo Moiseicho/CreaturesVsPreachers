@@ -16,8 +16,6 @@ public class EffectOnFizle : Area2D
 	private float fadeTime;
 	[Export]
 	private bool oneHit;
-	
-	private Timer tickTimer;
 
 	private AnimatedSprite animatedSprite;
 
@@ -40,9 +38,9 @@ public class EffectOnFizle : Area2D
 		AddChild(entryTimer);
 		entryTimer.Connect("timeout", this, nameof(Default));
 
-		tickTimer = new Timer();
+		Timer tickTimer = new Timer();
 		tickTimer.WaitTime = tickTime;
-		tickTimer.OneShot = !oneHit;
+		tickTimer.OneShot = oneHit;
 		AddChild(tickTimer);
 		tickTimer.Connect("timeout", this, nameof(Tick));
 
@@ -85,7 +83,7 @@ public class EffectOnFizle : Area2D
 			{
 				Zomble zomble = (Zomble)node;
 				zomble.takeDamage(Damage, 0);
-				zomble.slowDown(slow, tickTime+0.1f);
+				if(slow != 1)zomble.slowDown(slow, tickTime+0.1f);
 			}
 		}
 	}
@@ -95,7 +93,7 @@ public class EffectOnFizle : Area2D
 		if(body is Zomble)
 		{
 			Zomble zomble = (Zomble)body;
-			zomble.slowDown(slow, tickTime+0.1f);
+			if(slow != 1)zomble.slowDown(slow, tickTime+0.1f);
 		}
 	}
 

@@ -32,7 +32,6 @@ public class UpgradeOption : TextureButton
 
 	private void _on_UpgradeOptionButton_pressed()
 	{
-		GD.Print("pressed");
 		if(player == null) return;
 		if(statsUpgrade != null) statsUpgrade.GiveUpgrade(player);
 		if(giveUpgrade != null) giveUpgrade.GiveItem(player);

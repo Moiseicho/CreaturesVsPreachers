@@ -479,7 +479,6 @@ position = Vector2( -235, -160 )
 [node name="Player" parent="." instance=ExtResource( 1 )]
 collision_mask = 6
 speed = 15000.0
-maxHp = 30.0
 
 [node name="GUI" parent="." instance=ExtResource( 4 )]
 

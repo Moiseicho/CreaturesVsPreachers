@@ -8,8 +8,10 @@ public class Menu : Node
 	{
 		fader = (Fader)GetNode("Fader");
 
-		fader.Connect(nameof(Fader._Retry_after_death), this, nameof(ChangeSceneAfterTimer), new Godot.Collections.Array() {"res://Nodes/sceneTest.tscn"});
-		fader.Connect(nameof(Fader._Menu_after_death), this, nameof(ChangeSceneAfterTimer), new Godot.Collections.Array() {"res://Nodes/ui/Main menu.tscn"});
+		fader.Connect(nameof(Fader._Retry_after_death), this, nameof(ChangeSceneAfterTimer),
+			new Godot.Collections.Array() {"res://Nodes/sceneTest.tscn"});
+		fader.Connect(nameof(Fader._Menu_after_death), this, nameof(ChangeSceneAfterTimer), 
+			new Godot.Collections.Array() {"res://Nodes/ui/Main menu.tscn"});
 		fader.Connect(nameof(Fader._Quit_after_death), this, nameof(ExitGame));
 	}
 

@@ -2,7 +2,6 @@ using Godot;
 
 public class ThrowAbility : Ability
 {
-	[Export]
 	private PackedScene bulletScene;
 
 	public void setBulletScene(PackedScene bulletScene)
@@ -10,7 +9,6 @@ public class ThrowAbility : Ability
 		this.bulletScene = bulletScene;
 	}
 
-	
 	public override void Effect()
 	{
 		player.equipAbility(bulletScene);

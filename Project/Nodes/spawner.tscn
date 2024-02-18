@@ -42,8 +42,6 @@ tracks/0/keys = {
 script = ExtResource( 1 )
 spawnPoints = [ Vector2( -220, 600 ), Vector2( -900, 350 ), Vector2( -1100, -100 ), Vector2( -850, -600 ), Vector2( -225, -850 ), Vector2( 450, -600 ), Vector2( 650, -100 ), Vector2( 450, 350 ) ]
 
-[node name="Timer" type="Timer" parent="."]
-
 [node name="Label" type="Label" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
@@ -60,6 +58,8 @@ custom_colors/font_outline_modulate = Color( 0, 0, 0, 0.713726 )
 custom_fonts/font = SubResource( 1 )
 align = 1
 valign = 1
+
+[node name="Timer" type="Timer" parent="."]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "flash"
