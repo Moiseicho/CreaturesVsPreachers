@@ -62,7 +62,7 @@ public class Weapon : AnimatedSprite, Giveable
 		bullet.Speed = bulletSpeed;
 		bullet.Pierce = pierce;
 		GetTree().Root.AddChild(bullet);
-		if(targetZomble != null)
+		if(targetZomble != null && !Input.IsActionPressed("ui_gunlock"))
 		{
 			bullet.LookAt(targetZomble.GetTransform().origin);
 		}else
@@ -158,7 +158,12 @@ public class Weapon : AnimatedSprite, Giveable
 
 	public void gunlock()
 	{
-		if(targetZomble != null && reloadTimer <= 0f)
+		if(Input.IsActionPressed("ui_gunlock"))
+		{
+			Vector2 mousePos = GetGlobalMousePosition();
+			LookAt(mousePos);
+			
+		}else if(targetZomble != null && reloadTimer <= 0f)
 		{
 			LookAt(targetZomble.GetTransform().origin);
 		}else

@@ -93,6 +93,7 @@ public class EffectOnFizle : Area2D
 		if(body is Zomble)
 		{
 			Zomble zomble = (Zomble)body;
+			zomble.takeDamage(Damage, 0);
 			if(slow != 1)zomble.slowDown(slow, tickTime+0.1f);
 		}
 	}

@@ -74,6 +74,6 @@ ammoCapacity = 1
 reloadTime = 0.0
 knockback = 10000.0
 bulletSpeed = 750.0
-bulletOffset = Vector2( 65, -15 )
+bulletOffset = Vector2( 65, -5 )
 bulletTimeOffset = 0.17
 bulletScene = ExtResource( 3 )

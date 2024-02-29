@@ -83,8 +83,9 @@ public class Spawner : Node
 				PackedScene zombleScene = GD.Load<PackedScene>(folderPath + "/" + zomble + ".tscn");
 				Zomble zombleInstance = zombleScene.Instance() as Zomble;
 				zombleInstance.Position = spawnPoints[new Random().Next(0, spawnPoints.Count)];
-				zombleInstance.Connect("_ZombleDied", this, nameof(OnZombleDied));
+				//zombleInstance.Connect("_ZombleDied", this, nameof(OnZombleDied));
 				zomblesAlive++;
+				zombleInstance.setSpawner(this);
 
 				GetParent().AddChild(zombleInstance);
 
@@ -120,5 +121,10 @@ public class Spawner : Node
 				label.Text = timeLeft.ToString();
 			}
 		}
+	}
+
+	public void decrementZomble()
+	{
+		OnZombleDied();
 	}
 }

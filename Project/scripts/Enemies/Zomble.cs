@@ -24,6 +24,7 @@ public class Zomble : KinematicBody2D
 	[Export]
 	private int maxPlayerTargetRadius;
 
+
 	private float tempSpeed = 0f;
 	private float speed = 0f;
 	private float playerTargetRadius;
@@ -40,6 +41,7 @@ public class Zomble : KinematicBody2D
 	private Area2D biteBox;
 	private Reactor reactor;
 	private Player player;
+	private Spawner spawner;
 
 	[Signal]
 	public delegate void _ZombleDied();
@@ -101,6 +103,7 @@ public class Zomble : KinematicBody2D
 		}
 		
 		EmitSignal(nameof(_ZombleDied));
+		spawner.decrementZomble();
 		QueueFree();
 	}
 
@@ -258,11 +261,17 @@ public class Zomble : KinematicBody2D
 			if(suicide)
 			{
 				EmitSignal(nameof(_ZombleDied));
+				spawner.decrementZomble();
 				QueueFree();
 			}
 			biting = false;
 			animatedSprite.Animation = "walk";
 		}
+	}
+
+	public void setSpawner(Spawner spawner)
+	{
+		this.spawner = spawner;
 	}
 
 }

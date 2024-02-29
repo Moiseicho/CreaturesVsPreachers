@@ -2,14 +2,17 @@
 Diploma project. A 2D topdown zombie defence game.
 
 ## How to run
-Inside the export folder is an exe, run it. (It is better to run it from terminal to see error log)
 
-For this version there are no tutorials or indicators, so this README will serve as such.
+Download the latest release found on this link:
+[Preachers_vs_Creatures_v0.1.zip]{}
+
+After downloading the zip file extract it.
+Run the Preachers_vs_Creatures.exe file inside of it.
 
 WASD - movement
-M1 - shoot
+M1 - select/shoot
 Q - first ability
 E - second ability
 R - manual reload
 
-Choose the magic staff after wave one to get an ability, since there are no abilities for the smg.
+Fight trough hordes of zombies, choose new weapons and abilities and have fun.

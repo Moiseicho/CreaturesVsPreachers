@@ -40,7 +40,20 @@
             "itemPath":"res://Nodes/weapons/SMG.tscn",
             "imagePath":"res://Sprites/weapons/SMG/smgshop.png",
             "text":"SMG",
-            "subUpgrades":[]
+            "subUpgrades":[
+                {
+                    "stats":null,
+                    "type":"ability",
+                    "imagePath":"res://Sprites/bullets/Throwables/Grenade/Grenade.png",
+                    "text":"Grenade",
+                    "ability":{
+                        "type":"throw",
+                        "cooldown": 30,
+                        "bulletPath": "res://Nodes/bullets/throwables/Grenade.tscn"
+                    },
+                    "subUpgrades":[]
+                }
+            ]
         }
     ]
 }
