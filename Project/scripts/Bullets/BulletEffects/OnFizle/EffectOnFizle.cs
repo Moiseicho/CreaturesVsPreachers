@@ -37,16 +37,18 @@ public class EffectOnFizle : Area2D
 		entryTimer.OneShot = true;
 		AddChild(entryTimer);
 		entryTimer.Connect("timeout", this, nameof(Default));
-
+		
+		effectTimer.Start();
+		entryTimer.Start();
+		
+		if(oneHit) return;
 		Timer tickTimer = new Timer();
 		tickTimer.WaitTime = tickTime;
 		tickTimer.OneShot = oneHit;
 		AddChild(tickTimer);
 		tickTimer.Connect("timeout", this, nameof(Tick));
 
-		effectTimer.Start();
 		tickTimer.Start();
-		entryTimer.Start();
 	}
 
 	private void Default()
