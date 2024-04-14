@@ -44,7 +44,7 @@ public class EffectOnFizle : Area2D
 		if(oneHit) return;
 		Timer tickTimer = new Timer();
 		tickTimer.WaitTime = tickTime;
-		tickTimer.OneShot = oneHit;
+		tickTimer.OneShot = false;
 		AddChild(tickTimer);
 		tickTimer.Connect("timeout", this, nameof(Tick));
 

@@ -4,9 +4,12 @@ using System;
 
 public class Zomble : KinematicBody2D
 {
-	
+	[Export]
+	private float knockbackCoef = 1f;
 	[Export]
 	private bool suicide = false;
+	[Export]
+	private bool attackOnDeath = false;
 	[Export]
 	private float biteDelay = 0.4f;
 	[Export]
@@ -94,7 +97,7 @@ public class Zomble : KinematicBody2D
 	{
 		if(died) return;
 		died = true;
-		if(suicide)
+		if(attackOnDeath)
 		{
 			animatedSprite.Animation = "bite";
 			StartWait(biteDelay);
@@ -218,9 +221,10 @@ public class Zomble : KinematicBody2D
 	{
 		if(frozen) return;
 		health -= damage;
+		GD.Print("took " + damage + " damage and have " + health + " health left");
 		if(!stuck)
 		{
-			tempSpeed = tempSpeed - knockback;
+			tempSpeed = tempSpeed - knockback * knockbackCoef;
 			if(tempSpeed < speed * MinSpeedCoef)
 			{
 				tempSpeed = speed * MinSpeedCoef;

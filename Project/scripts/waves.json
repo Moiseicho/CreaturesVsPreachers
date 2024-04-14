@@ -9,14 +9,14 @@
                 },
                 {
                     "zomble": "7"
-                },
+                }
             ]
         },
         {
             "subWaves":
             [
                 {
-                    "zomble": "3",
+                    "zomble": "5",
                     "bomber": "1"
                 },
                 {
@@ -29,12 +29,26 @@
             "subWaves":
             [
                 {
-                    "zomble": "10",
-                    "bomber": "1"
+                    "zomble": "5",
+                    "tank": "1"
                 },
                 {
-                    "zomble": "15",
-                    "bomber": "2"
+                    "tank": "2"
+                }
+            ]
+        },
+        {
+            "subWaves":
+            [
+                {
+                    "zomble": "10",
+                    "bomber": "1",
+                    "tank": "1"
+                },
+                {
+                    "zomble": "13",
+                    "bomber": "3",
+                    "tank": "1"
                 }
             ]
         }

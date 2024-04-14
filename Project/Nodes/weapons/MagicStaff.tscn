@@ -69,6 +69,7 @@ frame = 10
 playing = true
 offset = Vector2( 45, -10 )
 script = ExtResource( 2 )
+damagePerBullet = 6.0
 fireRate = 1.0
 ammoCapacity = 1
 reloadTime = 0.0

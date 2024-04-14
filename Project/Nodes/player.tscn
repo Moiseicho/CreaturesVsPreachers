@@ -56,7 +56,6 @@ script = ExtResource( 2 )
 speed = 5.0
 
 [node name="eagle" parent="." instance=ExtResource( 3 )]
-z_index = 4
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 9 )
