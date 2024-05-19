@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/zomble1.wav-d8da20aa07c1a71ae5a9cede290f52d8.sample"
+
+[deps]
+
+source_file="res://Sound/Enemies/zomble/zomble1.wav"
+dest_files=[ "res://.import/zomble1.wav-d8da20aa07c1a71ae5a9cede290f52d8.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

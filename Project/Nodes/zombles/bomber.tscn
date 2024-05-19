@@ -1,8 +1,9 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://scripts/Enemies/Zomble.cs" type="Script" id=1]
 [ext_resource path="res://Sprites/zomble/bomber run/bomber_run.png" type="Texture" id=2]
 [ext_resource path="res://Sprites/zomble/bomber run/bomber_caboom.png" type="Texture" id=3]
+[ext_resource path="res://Sound/Enemies/zomble/zomble1.wav" type="AudioStream" id=4]
 
 [sub_resource type="CapsuleShape2D" id=5]
 radius = 62.0
@@ -128,6 +129,8 @@ minDamage = 8
 maxDamage = 10
 minPlayerTargetRadius = 1000
 maxPlayerTargetRadius = 1000
+soundPathsDamage = [  ]
+soundPathsIdle = [ "Enemies/bomber/bomber.wav", "Enemies/bomber/bomber2.wav" ]
 
 [node name="CollisionHull" type="CollisionShape2D" parent="."]
 position = Vector2( -1, 1 )
@@ -149,5 +152,8 @@ shape = SubResource( 7 )
 scale = Vector2( 10, 10 )
 frames = SubResource( 17 )
 animation = "walk"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
 
 [connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
