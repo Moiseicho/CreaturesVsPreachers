@@ -37,7 +37,11 @@
       "frameworks": {
         "net472": {
           "targetAlias": "net472",
+<<<<<<< HEAD
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.421\\RuntimeIdentifierGraph.json"
+=======
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.422\\RuntimeIdentifierGraph.json"
+>>>>>>> fix_pauseMenu
         }
       }
     }

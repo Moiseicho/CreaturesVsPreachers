@@ -14,7 +14,6 @@ public class GUI : Menu
 	private TextureProgress abilityQCooldown;
 	private TextureProgress abilityECooldown;
 	private Label ammoCounter;
-	private bool dead = false;
 
 	public override void _Ready()
 	{
@@ -39,7 +38,6 @@ public class GUI : Menu
 
 	private void _on_GameOver()
 	{
-		dead = true;
 		GetTree().Paused = true;
 		FadeOutDied();
 	}
@@ -64,13 +62,13 @@ public class GUI : Menu
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
-		if (@event.IsActionPressed("ui_escape") && !dead)
+		if (@event.IsActionPressed("ui_escape"))
 		{
-			if (menuOpen)
+			if (menuOpen && GetTree().Paused)
 			{
 				closeMenu();
 			}
-			else
+			else if (!menuOpen && !GetTree().Paused)
 			{
 				openMenu();
 			}
