@@ -157,11 +157,15 @@ animation = "fade"
 polygon = PoolVector2Array( -12, -57, -31, -45, -35.4286, -37.7143, -51.4286, -13.1429, -54, -6, -62, 40, 2, 64, 63, 44, 45, -31, -12, -57, -12, -50, 39, -27, 56, 40, 3, 58, -57, 37, -49, -4, -45.1429, -9.71429, -32, -34.2857, -28, -43, -12, -50 )
 
 [node name="FreezeArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="FreezeArea"]
 polygon = PoolVector2Array( -29.4286, -43.7143, -30.5714, -34.8571, -44.5714, -10.5714, -50, -4.28571, -59.1429, 38, 2.85714, 59.7143, 58.2857, 41.4286, 41.7143, -28.2857, -12, -54.2857 )
 
 [node name="UnfreezeArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="UnfreezeArea"]
 polygon = PoolVector2Array( -12, -57.1429, -31.1429, -44.8571, -32.2857, -36.8571, -48, -11.1429, -54.2857, -6, -62.2857, 39.7143, 2, 64, 63.1429, 44.2857, 45.4286, -31.1429 )

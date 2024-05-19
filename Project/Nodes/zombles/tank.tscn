@@ -1,13 +1,10 @@
-[gd_scene load_steps=114 format=2]
+[gd_scene load_steps=115 format=2]
 
 [ext_resource path="res://scripts/Enemies/Zomble.cs" type="Script" id=1]
 [ext_resource path="res://Sprites/zomble/tank/tankRunSheet.png" type="Texture" id=2]
 [ext_resource path="res://Sprites/zomble/bomber run/bomber_caboom.png" type="Texture" id=3]
 [ext_resource path="res://Sprites/zomble/tank/tankAttackSheet.png" type="Texture" id=4]
-
-[sub_resource type="CapsuleShape2D" id=5]
-radius = 221.0
-height = 258.0
+[ext_resource path="res://Sound/Enemies/zomble/zomble1.wav" type="AudioStream" id=5]
 
 [sub_resource type="CapsuleShape2D" id=39]
 radius = 380.0
@@ -450,25 +447,26 @@ animations = [ {
 "speed": 2.0
 } ]
 
+[sub_resource type="CapsuleShape2D" id=145]
+radius = 130.0
+height = 240.0
+
 [node name="tank" type="KinematicBody2D" groups=["zomble"]]
 scale = Vector2( 0.1, 0.1 )
 z_index = 5
-collision_layer = 3
-collision_mask = 3
+collision_layer = 2
+collision_mask = 2
 script = ExtResource( 1 )
 knockbackCoef = 0.0
 suicide = true
-biteDelay = 9.5
-maxHealth = 100.0
+biteDelay = 10.1
+maxHealth = 140.0
 minSpeed = 1500
 maxSpeed = 2000
-minDamage = 200
-maxDamage = 200
-
-[node name="CollisionHull" type="CollisionShape2D" parent="."]
-position = Vector2( -1, -100 )
-shape = SubResource( 5 )
-one_way_collision_margin = 0.0
+minDamage = 150
+maxDamage = 150
+soundPathsDamage = [  ]
+soundPathsIdle = [ "Enemies/tank/tank1.wav", "Enemies/tank/tank2.wav", "Enemies/tank/tank3.wav" ]
 
 [node name="BiteBox" type="Area2D" parent="." groups=["enemy"]]
 position = Vector2( 0, -100 )
@@ -488,5 +486,11 @@ frames = SubResource( 17 )
 animation = "bite"
 frame = 101
 playing = true
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 145 )
 
 [connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]

@@ -1,6 +1,6 @@
 using Godot;
 using System;
-
+using System.Collections.Generic;
 
 public class Zomble : KinematicBody2D
 {
@@ -26,6 +26,12 @@ public class Zomble : KinematicBody2D
 	private int minPlayerTargetRadius;
 	[Export]
 	private int maxPlayerTargetRadius;
+	[Export]
+	private List<string> soundPathsDamage;
+	[Export]
+	private List<string> soundPathsIdle;
+	
+	
 
 
 	private float tempSpeed = 0f;
@@ -35,6 +41,7 @@ public class Zomble : KinematicBody2D
 	private float health;
 	private Timer slowDownTimer;
 	private Timer biteTimer;
+	private Timer soundTimer;
 	private bool biting = false;
 	private bool right = true;
 	private bool stuck = false;
@@ -45,6 +52,9 @@ public class Zomble : KinematicBody2D
 	private Reactor reactor;
 	private Player player;
 	private Spawner spawner;
+	private AudioStreamPlayer2D audioPlayer;
+	private List<AudioStreamSample> soundsDamage = new List<AudioStreamSample>();
+	private List<AudioStreamSample> soundsIdle = new List<AudioStreamSample>();
 
 	[Signal]
 	public delegate void _ZombleDied();
@@ -57,6 +67,7 @@ public class Zomble : KinematicBody2D
 		biteBox = (Area2D)GetNode("BiteBox");
 		animatedSprite = (AnimatedSprite)GetNode("AnimatedSprite");
 		reactor = (Reactor)GetNode("../Reactor");
+		audioPlayer = (AudioStreamPlayer2D)GetNode("AudioStreamPlayer2D");
 		
 		biteTimer = new Timer();
 		AddChild(biteTimer);
@@ -64,6 +75,9 @@ public class Zomble : KinematicBody2D
 		slowDownTimer = new Timer();
 		AddChild(slowDownTimer);
 		slowDownTimer.Connect("timeout", this, nameof(unstuck));
+		soundTimer = new Timer();
+		AddChild(soundTimer);
+		soundTimer.Connect("timeout", this, nameof(_playSoundNow));
 
 		animatedSprite.Animation = "walk";
 		animatedSprite.Play();
@@ -82,7 +96,32 @@ public class Zomble : KinematicBody2D
 		}
 		damage = random.Next(minDamage, maxDamage);
 
-		
+		foreach (string path in soundPathsDamage)
+		{
+			AudioStreamSample sound = new AudioStreamSample();
+			string newPath = "res://Sound/" + path;
+			sound = GD.Load<AudioStreamSample>(newPath);
+			if(sound != null)
+			{
+				soundsDamage.Add(sound);
+			}
+		}
+		foreach (string path in soundPathsIdle)
+		{
+			AudioStreamSample sound = new AudioStreamSample();
+			string newPath = "res://Sound/" + path;
+			sound = GD.Load<AudioStreamSample>(newPath);
+			if(sound != null)
+			{
+				soundsIdle.Add(sound);
+			}
+		}
+
+		audioPlayer.Connect("finished", this, nameof(playSound), new Godot.Collections.Array(soundsIdle, 2000, 5000));
+		if(soundsDamage.Count == 0)
+		{
+			playSound(soundsIdle, 1000, 1001);
+		}
 	}
 
 	public void manageLife()
@@ -212,6 +251,30 @@ public class Zomble : KinematicBody2D
 		}
 	}
 
+	//create a thread
+	public void playSound(List<AudioStreamSample> sounds, int minTime, int maxTime)
+	{
+		if(sounds.Count == 0) return;
+		if(audioPlayer.Playing)return;
+		Random random = new Random();
+		int index = random.Next(0, sounds.Count);
+		float time = (float)random.Next(minTime, maxTime) / 1000f;
+		audioPlayer.Stream = sounds[index];
+		if(time == 0)
+		{
+			_playSoundNow();
+			return;
+		}
+		soundTimer.WaitTime = time;
+		soundTimer.OneShot = true;
+		soundTimer.Start();
+	}
+
+	private void _playSoundNow()
+	{
+		audioPlayer.Play();
+	}
+
 	public void setSpeed(int speed){this.speed = speed;}
 	public void setRadius(float radius){this.playerTargetRadius = radius;}
 
@@ -221,7 +284,6 @@ public class Zomble : KinematicBody2D
 	{
 		if(frozen) return;
 		health -= damage;
-		GD.Print("took " + damage + " damage and have " + health + " health left");
 		if(!stuck)
 		{
 			tempSpeed = tempSpeed - knockback * knockbackCoef;
@@ -230,6 +292,7 @@ public class Zomble : KinematicBody2D
 				tempSpeed = speed * MinSpeedCoef;
 			}
 		}
+		playSound(soundsDamage, 0, 300);
 	}
 
 	public void slowDown(float slowDown, float duration)
@@ -251,11 +314,13 @@ public class Zomble : KinematicBody2D
 	{
 		frozen = true;
 		animatedSprite.Stop();
+		biteTimer.Stop();
 	}
 	public void unfreeze()
 	{
 		frozen = false;
 		animatedSprite.Play();
+		biteTimer.Start();
 	}
 
 	private void _on_AnimatedSprite_animation_finished()

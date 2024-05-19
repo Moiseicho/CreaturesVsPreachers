@@ -113,7 +113,7 @@ maxHealth = 350.0
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 16 )
 animation = "100%"
-frame = 4
+frame = 1
 playing = true
 
 [node name="Label" type="Label" parent="."]
