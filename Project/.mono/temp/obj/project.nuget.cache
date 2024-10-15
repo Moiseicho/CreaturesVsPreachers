@@ -1,10 +1,6 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "b8kuGOW2jSQIzLj/1PkHFJG5p7FwlQUeeSLmB7Nh5lKbrCYh5NJThzctfsalLco3aARBioASKADqpPx9PYUWxQ==",
-=======
-  "dgSpecHash": "VGp+najSevvfUXswznnQFVi09FuTteR/5dN7uCDo6ehLUxAzmku4h4/WhgVkh0ZI6l2VXbBlWstYE/a3Eps9BQ==",
->>>>>>> fix_pauseMenu
+  "dgSpecHash": "SHCbX0z2Cov/yTtLVkgvPDzRYgJ3pWFznbXWHu2MkNDQgD5/u+JhqVXAOZsYz60MtOZSpS/NoH45C8PrH3434A==",
   "success": true,
   "projectFilePath": "C:\\Program Files (x86)\\Godot_v3.5.1-stable_mono_win64\\Project\\Project\\Game.csproj",
   "expectedPackageFiles": [],
