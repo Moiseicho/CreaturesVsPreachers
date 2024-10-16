@@ -372,3 +372,6 @@ anims/appear = SubResource( 7 )
 [connection signal="pressed" from="PauseMenu/TextureRect/VBoxContainer/Resume" to="." method="_on_Resume_pressed"]
 [connection signal="pressed" from="PauseMenu/TextureRect/VBoxContainer/Menu" to="." method="_on_Menu_pressed"]
 [connection signal="pressed" from="PauseMenu/TextureRect/VBoxContainer/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="mouse_entered" from="UpgradeMenu/UpgradeOptionButton1" to="." method="_on_UpgradeOptionButton_mouse_entered"]
+[connection signal="mouse_entered" from="UpgradeMenu/UpgradeOptionButton2" to="." method="_on_UpgradeOptionButton_mouse_entered"]
+[connection signal="mouse_entered" from="UpgradeMenu/UpgradeOptionButton3" to="." method="_on_UpgradeOptionButton_mouse_entered"]

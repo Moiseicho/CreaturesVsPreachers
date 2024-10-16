@@ -44,7 +44,6 @@ public class GUI : Menu
 		menuOpenSound = GD.Load<AudioStreamSample>("res://Sound/SFX/menuOpen.wav");
 		menuCloseSound = GD.Load<AudioStreamSample>("res://Sound/SFX/menuClose.wav");
 		
-
 		upgradeMenu.Connect(nameof(UpgradeMenu.UpgradeMenuClose), this, nameof(closeUpgradeMenu));
 
 		player.Connect(nameof(Player._PlayerDied), this, nameof(_on_GameOver));
@@ -140,8 +139,17 @@ public class GUI : Menu
 
 	public void closeUpgradeMenu()
 	{
+		audioStreamPlayer.Stream = upgradeOptionSound;
+		audioStreamPlayer.Play();
 		upgradeMenu.Visible = false;
 		GetTree().Paused = false;
+	}
+
+	public void _on_UpgradeOptionButton_mouse_entered()
+	{
+		if(audioStreamPlayer.Playing) return;
+		audioStreamPlayer.Stream = hoverSound;
+		audioStreamPlayer.Play();
 	}
 
 	public void victory()

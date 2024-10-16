@@ -16,3 +16,13 @@ C:\Program Files (x86)\Godot_v3.5.1-stable_mono_win64\Project\Project\.mono\temp
 C:\Program Files (x86)\Godot_v3.5.1-stable_mono_win64\Project\Project\.mono\temp\obj\Debug\Game.csproj.CoreCompileInputs.cache
 C:\Program Files (x86)\Godot_v3.5.1-stable_mono_win64\Project\Project\.mono\temp\obj\Debug\Game.dll
 C:\Program Files (x86)\Godot_v3.5.1-stable_mono_win64\Project\Project\.mono\temp\obj\Debug\Game.pdb
+C:\Users\matei\Gamedev\Prechers vs Creatures\CreaturesVsPreachers\Project\.mono\temp\bin\Debug\Game.dll
+C:\Users\matei\Gamedev\Prechers vs Creatures\CreaturesVsPreachers\Project\.mono\temp\bin\Debug\Game.pdb
+C:\Users\matei\Gamedev\Prechers vs Creatures\CreaturesVsPreachers\Project\.mono\temp\obj\Debug\Game.csproj.AssemblyReference.cache
+C:\Users\matei\Gamedev\Prechers vs Creatures\CreaturesVsPreachers\Project\.mono\temp\obj\Debug\Game.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\matei\Gamedev\Prechers vs Creatures\CreaturesVsPreachers\Project\.mono\temp\obj\Debug\Game.AssemblyInfoInputs.cache
+C:\Users\matei\Gamedev\Prechers vs Creatures\CreaturesVsPreachers\Project\.mono\temp\obj\Debug\Game.AssemblyInfo.cs
+C:\Users\matei\Gamedev\Prechers vs Creatures\CreaturesVsPreachers\Project\.mono\temp\obj\Debug\Game.csproj.CoreCompileInputs.cache
+C:\Users\matei\Gamedev\Prechers vs Creatures\CreaturesVsPreachers\Project\.mono\temp\obj\Debug\Game.sourcelink.json
+C:\Users\matei\Gamedev\Prechers vs Creatures\CreaturesVsPreachers\Project\.mono\temp\obj\Debug\Game.dll
+C:\Users\matei\Gamedev\Prechers vs Creatures\CreaturesVsPreachers\Project\.mono\temp\obj\Debug\Game.pdb

@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "SHCbX0z2Cov/yTtLVkgvPDzRYgJ3pWFznbXWHu2MkNDQgD5/u+JhqVXAOZsYz60MtOZSpS/NoH45C8PrH3434A==",
+  "dgSpecHash": "n23FYeqzShg=",
   "success": true,
-  "projectFilePath": "C:\\Program Files (x86)\\Godot_v3.5.1-stable_mono_win64\\Project\\Project\\Game.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\matei\\Gamedev\\Prechers vs Creatures\\CreaturesVsPreachers\\Project\\Game.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\matei\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.3\\microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
+    "C:\\Users\\matei\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net472\\1.0.3\\microsoft.netframework.referenceassemblies.net472.1.0.3.nupkg.sha512"
+  ],
   "logs": []
 }
