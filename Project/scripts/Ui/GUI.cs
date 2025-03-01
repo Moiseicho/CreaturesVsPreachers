@@ -14,6 +14,13 @@ public class GUI : Menu
 	private TextureProgress abilityQCooldown;
 	private TextureProgress abilityECooldown;
 	private Label ammoCounter;
+	private AudioStreamPlayer audioStreamPlayer = new AudioStreamPlayer();
+	private AudioStreamSample hoverSound = new AudioStreamSample();
+	private AudioStreamSample clickSound = new AudioStreamSample();
+	private AudioStreamSample upgradeMenuSound = new AudioStreamSample();
+	private AudioStreamSample upgradeOptionSound= new AudioStreamSample();
+	private AudioStreamSample menuOpenSound = new AudioStreamSample();
+	private AudioStreamSample menuCloseSound = new AudioStreamSample();
 
 	public override void _Ready()
 	{
@@ -28,9 +35,16 @@ public class GUI : Menu
 		abilityQCooldown = (TextureProgress)GetNode("HUD/Rows/Bottom row/Qsquare/Cooldown");
 		abilityECooldown = (TextureProgress)GetNode("HUD/Rows/Bottom row/Esquare/Cooldown");
 		ammoCounter = (Label)GetNode("HUD/AmmoCounter/Label");
-
+		audioStreamPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
+		audioStreamPlayer.PauseMode = AudioStreamPlayer.PauseModeEnum.Process;
+		hoverSound = GD.Load<AudioStreamSample>("res://Sound/SFX/hover.wav");
+		clickSound = GD.Load<AudioStreamSample>("res://Sound/SFX/click.wav");
+		upgradeMenuSound = GD.Load<AudioStreamSample>("res://Sound/SFX/upgradeMenu.wav");
+		upgradeOptionSound = GD.Load<AudioStreamSample>("res://Sound/SFX/upgradeOption.wav");
+		menuOpenSound = GD.Load<AudioStreamSample>("res://Sound/SFX/menuOpen.wav");
+		menuCloseSound = GD.Load<AudioStreamSample>("res://Sound/SFX/menuClose.wav");
+		
 		upgradeMenu.Connect(nameof(UpgradeMenu.UpgradeMenuClose), this, nameof(closeUpgradeMenu));
-
 
 		player.Connect(nameof(Player._PlayerDied), this, nameof(_on_GameOver));
 		reactor.Connect(nameof(Reactor._ReactorDestroyed), this, nameof(_on_GameOver));
@@ -77,6 +91,8 @@ public class GUI : Menu
 
 	private void openMenu()
 	{
+		audioStreamPlayer.Stream = menuOpenSound;
+		audioStreamPlayer.Play();
 		GetTree().Paused = true;
 		menu.Visible = true;
 		menuOpen = true;
@@ -85,10 +101,13 @@ public class GUI : Menu
 	private void _on_Resume_pressed()
 	{
 		closeMenu();
+
 	}
 
 	private void closeMenu()
 	{
+		audioStreamPlayer.Stream = menuCloseSound;
+		audioStreamPlayer.Play();
 		GetTree().Paused = false;
 		menu.Visible = false;
 		menuOpen = false;
@@ -96,26 +115,41 @@ public class GUI : Menu
 	
 	private void _on_Menu_pressed()
 	{
+		audioStreamPlayer.Stream = clickSound;
+		audioStreamPlayer.Play();
 		closeMenu();
 		FadeOut("res://Nodes/ui/Main menu.tscn");
 	}
 	
 	private void _on_Quit_pressed()
 	{
+		audioStreamPlayer.Stream = clickSound;
+		audioStreamPlayer.Play();
 		closeMenu();
 		FadeOutExit();
 	}
 
 	public void openUpgradeMenu()
 	{
+		audioStreamPlayer.Stream = upgradeMenuSound;
+		audioStreamPlayer.Play();
 		GetTree().Paused = true;
 		upgradeMenu.Appear(player);
 	}
 
 	public void closeUpgradeMenu()
 	{
+		audioStreamPlayer.Stream = upgradeOptionSound;
+		audioStreamPlayer.Play();
 		upgradeMenu.Visible = false;
 		GetTree().Paused = false;
+	}
+
+	public void _on_UpgradeOptionButton_mouse_entered()
+	{
+		if(audioStreamPlayer.Playing) return;
+		audioStreamPlayer.Stream = hoverSound;
+		audioStreamPlayer.Play();
 	}
 
 	public void victory()

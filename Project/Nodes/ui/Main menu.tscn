@@ -70,5 +70,9 @@ icon_align = 1
 
 [node name="Fader" parent="." instance=ExtResource( 4 )]
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[connection signal="mouse_entered" from="ExitButton" to="." method="_on_ExitButton_mouse_entered"]
 [connection signal="pressed" from="ExitButton" to="." method="_on_ExitButton_pressed"]
+[connection signal="mouse_entered" from="StartButton" to="." method="_on_StartButton_mouse_entered"]
 [connection signal="pressed" from="StartButton" to="." method="_on_StartButton_pressed"]

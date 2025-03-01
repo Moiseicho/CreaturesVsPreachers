@@ -27,6 +27,11 @@ public class Weapon : AnimatedSprite, Giveable
 	private int pierce = 0;
 	[Export]
 	PackedScene bulletScene;
+	[Export]
+	private AudioStreamSample fireSound;
+	[Export]
+	private AudioStreamSample reloadSound;
+	
 	
 	private int ammo;
 	private float fireTimer = 0f;
@@ -36,7 +41,7 @@ public class Weapon : AnimatedSprite, Giveable
 	private bool disabled = false;
 	Zomble targetZomble;
 	private Vector2 originalOffset;
-	
+	private AudioStreamPlayer audioStreamPlayer;
 
 	public override void _Ready()
 	{
@@ -46,6 +51,9 @@ public class Weapon : AnimatedSprite, Giveable
 		originalOffset = Offset;
 		this.Playing = true;
 
+		audioStreamPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
+		audioStreamPlayer.PauseMode = AudioStreamPlayer.PauseModeEnum.Process;
+
 		bulletOffsetTimer = new Timer();
 		bulletOffsetTimer.OneShot = true;
 		AddChild(bulletOffsetTimer);
@@ -54,6 +62,10 @@ public class Weapon : AnimatedSprite, Giveable
 
 	public void createBullet()
 	{
+
+		audioStreamPlayer.Stream = fireSound;
+		audioStreamPlayer.Play();
+
 		Bullet bullet = (Bullet)bulletScene.Instance();
 		bullet.Position = GlobalPosition + (bulletOffset * new Vector2(1, FlipV ? -1 : 1)).Rotated(Rotation);
 		bullet.Damage = damagePerBullet;
@@ -74,7 +86,7 @@ public class Weapon : AnimatedSprite, Giveable
 	private void shoot()
 	{
 		if(fireTimer > 0f || reloadTimer > 0f || ammo <= 0) return;
-		
+
 		if(bulletTimeOffset == 0f)
 		{
 			createBullet();
@@ -105,6 +117,8 @@ public class Weapon : AnimatedSprite, Giveable
 			ammo = ammoCapacity;
 			reloadTimer = reloadTime;
 			this.Animation = "reload";
+			audioStreamPlayer.Stream = reloadSound;
+			audioStreamPlayer.Play();
 		}
 		
 		if(reloadTimer > 0)
@@ -215,6 +229,8 @@ public class Weapon : AnimatedSprite, Giveable
 		ammo = ammoCapacity;
 		reloadTimer = reloadTime;
 		this.Animation = "reload";
+		audioStreamPlayer.Stream = reloadSound;
+		audioStreamPlayer.Play();
 	}
 
 	public void setImage(Texture image)

@@ -68,6 +68,7 @@ public class Zomble : KinematicBody2D
 		animatedSprite = (AnimatedSprite)GetNode("AnimatedSprite");
 		reactor = (Reactor)GetNode("../Reactor");
 		audioPlayer = (AudioStreamPlayer2D)GetNode("AudioStreamPlayer2D");
+		audioPlayer.PauseMode = AudioStreamPlayer.PauseModeEnum.Process;
 		
 		biteTimer = new Timer();
 		AddChild(biteTimer);

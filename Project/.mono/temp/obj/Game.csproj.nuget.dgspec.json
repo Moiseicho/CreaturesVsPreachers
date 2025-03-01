@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Program Files (x86)\\Godot_v3.5.1-stable_mono_win64\\Project\\Project\\Game.csproj": {}
+    "C:\\Users\\matei\\Gamedev\\Prechers vs Creatures\\CreaturesVsPreachers\\Project\\Game.csproj": {}
   },
   "projects": {
-    "C:\\Program Files (x86)\\Godot_v3.5.1-stable_mono_win64\\Project\\Project\\Game.csproj": {
+    "C:\\Users\\matei\\Gamedev\\Prechers vs Creatures\\CreaturesVsPreachers\\Project\\Game.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Program Files (x86)\\Godot_v3.5.1-stable_mono_win64\\Project\\Project\\Game.csproj",
+        "projectUniqueName": "C:\\Users\\matei\\Gamedev\\Prechers vs Creatures\\CreaturesVsPreachers\\Project\\Game.csproj",
         "projectName": "Game",
-        "projectPath": "C:\\Program Files (x86)\\Godot_v3.5.1-stable_mono_win64\\Project\\Project\\Game.csproj",
-        "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
-        "outputPath": "C:\\Program Files (x86)\\Godot_v3.5.1-stable_mono_win64\\Project\\Project\\.mono\\temp\\obj\\",
+        "projectPath": "C:\\Users\\matei\\Gamedev\\Prechers vs Creatures\\CreaturesVsPreachers\\Project\\Game.csproj",
+        "packagesPath": "C:\\Users\\matei\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\matei\\Gamedev\\Prechers vs Creatures\\CreaturesVsPreachers\\Project\\.mono\\temp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Dell\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\matei\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net472"
@@ -32,16 +32,25 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net472": {
           "targetAlias": "net472",
-<<<<<<< HEAD
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.421\\RuntimeIdentifierGraph.json"
-=======
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.422\\RuntimeIdentifierGraph.json"
->>>>>>> fix_pauseMenu
+          "dependencies": {
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

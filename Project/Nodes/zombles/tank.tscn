@@ -484,11 +484,11 @@ shape = SubResource( 7 )
 scale = Vector2( 20, 20 )
 frames = SubResource( 17 )
 animation = "bite"
-frame = 101
 playing = true
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 5 )
+bus = "SFX"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 145 )
